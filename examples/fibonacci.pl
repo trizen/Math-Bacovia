@@ -7,6 +7,9 @@
 use utf8;
 use 5.016;
 
+use Test::More;
+plan tests => 10;
+
 use lib qw(
   ../lib
   ../../Math-AnyNum/lib
@@ -36,14 +39,7 @@ my @fibs = qw(
   );
 
 foreach my $n (0 .. 9) {
-    my $f = fibonacci($n);
-
-    my $have = $f->numeric;
-    my $want = shift(@fibs);
-
-    if ("$have" ne "$want") {
-        die "Error at n=$n: want $want, but got $have.";
-    }
+    is(fibonacci($n)->numeric, shift(@fibs));
 }
 
 my $simple = fibonacci(Symbol('n', 12))->simple;
@@ -51,4 +47,4 @@ my $simple = fibonacci(Symbol('n', 12))->simple;
 $simple->numeric eq '144'
   or die "Error in simplification!";
 
-say $simple->pretty;
+say $simple->simple->pretty;

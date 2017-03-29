@@ -44,7 +44,9 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 #
 
 sub numeric {
-    $_[0]->{value};
+    my ($x) = @_;
+    my $v = $x->{value};
+    defined($v) ? $v->numeric : undef;
 }
 
 sub pretty {

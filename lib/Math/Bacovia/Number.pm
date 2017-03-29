@@ -9,6 +9,10 @@ use parent qw(Math::Bacovia);
 sub new {
     my ($class, $value) = @_;
 
+    if (ref($value) && UNIVERSAL::isa($value, 'Math::Bacovia')) {
+        return $value;
+    }
+
     if (ref($value) ne 'Math::AnyNum') {
         $value = 'Math::AnyNum'->new($value);
     }
@@ -29,9 +33,19 @@ Class::Multimethods::multimethod add => (__PACKAGE__, __PACKAGE__) => sub {
     __PACKAGE__->new($x->{value} + $y->{value});
 };
 
+Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+    my ($x, $y) = @_;
+    'Math::Bacovia::Fraction'->new($x)->add($y);
+};
+
 Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{value} - $y->{value});
+};
+
+Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+    my ($x, $y) = @_;
+    'Math::Bacovia::Fraction'->new($x)->sub($y);
 };
 
 Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
@@ -39,9 +53,19 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
     __PACKAGE__->new($x->{value} * $y->{value});
 };
 
+Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+    my ($x, $y) = @_;
+    'Math::Bacovia::Fraction'->new($x)->mul($y);
+};
+
 Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{value} / $y->{value});
+};
+
+Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+    my ($x, $y) = @_;
+    'Math::Bacovia::Fraction'->new($x)->div($y);
 };
 
 #~ Class::Multimethods::multimethod pow => (__PACKAGE__, __PACKAGE__) => sub {
@@ -74,7 +98,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 #
 
 sub numeric {
-    $_[0]->{value};
+    $_[0]->{value}->copy;
 }
 
 sub pretty {

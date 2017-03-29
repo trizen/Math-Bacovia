@@ -2,7 +2,10 @@ Build.PL
 Changes
 examples/basic.pl
 examples/fibonacci.pl
+examples/floor_function.pl
+examples/fractions.pl
 examples/test.pl
+examples/trigonometry.pl
 examples/zeta_2n.pl
 ignore.txt
 lib/Math/Bacovia.pm
