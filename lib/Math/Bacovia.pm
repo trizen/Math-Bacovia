@@ -54,9 +54,9 @@ our $VERSION = '0.01';
 B<Math::Bacovia> is symbolic math library, with support for evaluating expressions numerically.
 
     use 5.016;
-    use Math::Bacovia;
+    use Math::Bacovia qw(Symbol);
 
-    my $n = Math::Bacovia::Symbol->new(n => 42);
+    my $n = Symbol(n => 42);
 
     say cos(-$n);
     say cos(-$n)->simple;
