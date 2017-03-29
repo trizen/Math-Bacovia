@@ -1,6 +1,6 @@
 # Math-Bacovia
 
-**Math::Bacovia** is a symbolic math library, with built-in support for numerical evaluation (including support for complex numbers).
+Math::Bacovia is a symbolic math library, with support for numerical evaluation (including support for complex numbers).
 
 # EXAMPLE
 
@@ -166,7 +166,7 @@ Output:
 
 # DEPENDENCIES
 
-**Math::Bacovia** requires the following modules:
+Math::Bacovia requires the following modules:
 
 * [Math::AnyNum](https://github.com/trizen/Math-AnyNum)
 * [List::UtilsBy::XS](https://metacpan.org/release/List-UtilsBy-XS)
