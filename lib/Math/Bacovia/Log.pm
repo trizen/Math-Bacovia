@@ -1,6 +1,8 @@
 package Math::Bacovia::Log;
 
 use 5.016;
+use warnings;
+
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 

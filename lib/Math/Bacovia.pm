@@ -142,37 +142,18 @@ sub import {
     while (@_) {
         my $name = shift(@_);
 
-        if ($name eq ':constant') {
-            overload::constant
-              integer => sub { 'Math::Bacovia::Number'->new('Math::AnyNum'->new_ui($_[0])) },
-              float   => sub { 'Math::Bacovia::Number'->new('Math::AnyNum'->new_f($_[0])) },
-              binary  => sub {
-                my ($const) = @_;
-                my $prefix = substr($const, 0, 2);
-
-                'Math::Bacovia::Number'->new(
-                                               $prefix eq '0x' ? 'Math::AnyNum'->new(substr($const, 2), 16)
-                                             : $prefix eq '0b' ? 'Math::AnyNum'->new(substr($const, 2), 2)
-                                             :                   'Math::AnyNum'->new(substr($const, 1), 8)
-                                            );
-              },
-              ;
-
+        no strict 'refs';
+        my $caller_sub = $caller . '::' . $name;
+        if (exists $exported_functions{$name}) {
+            my $sub = $exported_functions{$name};
+            *$caller_sub = $exported_functions{$name};
+        }
+        elsif (exists $exported_constants{$name}) {
+            my $value = $exported_constants{$name}->();
+            *$caller_sub = sub() { $value };
         }
         else {
-            no strict 'refs';
-            my $caller_sub = $caller . '::' . $name;
-            if (exists $exported_functions{$name}) {
-                my $sub = $exported_functions{$name};
-                *$caller_sub = $exported_functions{$name};
-            }
-            elsif (exists $exported_constants{$name}) {
-                my $value = $exported_constants{$name}->();
-                *$caller_sub = sub() { $value };
-            }
-            else {
-                die "unknown import: <<$name>>";
-            }
+            die "unknown import: <<$name>>";
         }
     }
 
@@ -500,9 +481,12 @@ sub acsch {
 
 sub simple {
     my ($x) = @_;
-    (List::UtilsBy::XS::min_by {
-        length($_->pretty)
-    } ($x->alternatives))[0];
+    (
+     List::UtilsBy::XS::min_by {
+         length($_->pretty)
+     }
+     ($x->alternatives)
+    )[0];
 }
 
 sub alternatives {

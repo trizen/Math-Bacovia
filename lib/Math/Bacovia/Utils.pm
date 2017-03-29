@@ -4,7 +4,6 @@ use 5.016;
 use warnings;
 
 no warnings 'recursion';
-
 use parent qw(Math::Bacovia);
 
 sub check_type($) {

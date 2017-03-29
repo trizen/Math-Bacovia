@@ -1,6 +1,8 @@
 package Math::Bacovia::Product;
 
 use 5.016;
+use warnings;
+
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 

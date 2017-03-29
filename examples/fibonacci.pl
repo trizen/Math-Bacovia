@@ -13,13 +13,12 @@ use lib qw(
   );
 
 use Math::Bacovia qw(
-  :constant pi
-  Power Log Symbol
+  pi Power Log Symbol
   );
 
 sub fibonacci {
     my ($n) = @_;
-    state $S = Power(5, 1 / 2);
+    state $S = Power(5, '1/2');
     (((1 + $S) / 2)**$n - ((2 / (1 + $S))**$n * cos(pi * $n))) / $S;
 }
 

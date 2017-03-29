@@ -1,6 +1,8 @@
 package Math::Bacovia::Symbol;
 
 use 5.016;
+use warnings;
+
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
@@ -15,6 +17,13 @@ sub new {
            name  => "$name",
            value => $value,
           }, $class;
+}
+
+sub inside {
+    my ($x) = @_;
+    defined($x->{value})
+      ? ($x->{name}, $x->{value})
+      : $x->{name};
 }
 
 #
@@ -46,7 +55,7 @@ sub stringify {
     my ($x) = @_;
     defined($x->{value})
       ? ("Symbol(\"\Q$x->{name}\E\", " . $x->{value}->stringify() . ")")
-      : ("Symbol(\"\E$x->{name}\E\")");
+      : ("Symbol(\"\Q$x->{name}\E\")");
 }
 
 1;

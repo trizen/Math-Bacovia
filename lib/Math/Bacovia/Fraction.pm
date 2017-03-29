@@ -1,6 +1,8 @@
 package Math::Bacovia::Fraction;
 
 use 5.016;
+use warnings;
+
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
@@ -20,6 +22,11 @@ sub new {
            num => $numerator,
            den => $denominator,
           }, $class;
+}
+
+sub inside {
+    my ($x) = @_;
+    ($x->{num}, $x->{den});
 }
 
 #

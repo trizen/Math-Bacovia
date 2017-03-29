@@ -16,6 +16,10 @@ sub new {
     bless {value => $value}, $class;
 }
 
+sub inside {
+    $_[0]->{value};
+}
+
 #
 ## Operations
 #
@@ -64,31 +68,6 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
 Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
     !1;
 };
-
-#
-## Number-theory methods
-#
-
-# TODO: add more.
-
-sub factorial {
-    __PACKAGE__->new($_[0]->{value}->copy->factorial);
-}
-
-Class::Multimethods::multimethod binomial => (__PACKAGE__, __PACKAGE__) => sub {
-    my ($x, $y) = @_;
-    __PACKAGE__->new($x->{value}->copy->binomial($y->{value}));
-};
-
-#
-## Special functions
-#
-
-# TODO: add more.
-
-sub zeta {
-    __PACKAGE__->new($_[0]->{value}->copy->zeta);
-}
 
 #
 ## Transformations

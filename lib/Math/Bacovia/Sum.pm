@@ -1,6 +1,8 @@
 package Math::Bacovia::Sum;
 
 use 5.016;
+use warnings;
+
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
