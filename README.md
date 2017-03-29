@@ -1,6 +1,6 @@
 # Math-Bacovia
 
-Math::Bacovia is a symbolic math library, with built-in support for numerical evaluation (including support for complex numbers).
+**Math::Bacovia** is a symbolic math library, with built-in support for numerical evaluation (including support for complex numbers).
 
 # EXAMPLE
 
