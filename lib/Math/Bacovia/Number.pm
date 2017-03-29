@@ -116,7 +116,7 @@ sub pretty {
 
 sub stringify {
     my ($x) = @_;
-    "$x->{value}";
+    $x->{value}->stringify;
 }
 
 #

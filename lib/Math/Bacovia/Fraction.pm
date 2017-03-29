@@ -113,7 +113,7 @@ sub pretty {
 
 sub stringify {
     my ($x) = @_;
-    "Fraction($x->{num}, $x->{den})";
+    "Fraction(" . $x->{num}->stringify() . ', ' . $x->{den}->stringify() . ")";
 }
 
 #
