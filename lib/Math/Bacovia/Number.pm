@@ -1,0 +1,126 @@
+package Math::Bacovia::Number;
+
+use 5.016;
+use warnings;
+
+use Class::Multimethods;
+use parent qw(Math::Bacovia);
+
+sub new {
+    my ($class, $value) = @_;
+
+    if (ref($value) ne 'Math::AnyNum') {
+        $value = 'Math::AnyNum'->new($value);
+    }
+
+    bless {value => $value}, $class;
+}
+
+#
+## Operations
+#
+
+Class::Multimethods::multimethod add => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{value} + $y->{value});
+};
+
+Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{value} - $y->{value});
+};
+
+Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{value} * $y->{value});
+};
+
+Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{value} / $y->{value});
+};
+
+#~ Class::Multimethods::multimethod pow => (__PACKAGE__, __PACKAGE__) => sub {
+#~ my ($x, $y) = @_;
+#~ __PACKAGE__->new($x->{value} ** $y->{value});
+#~ };
+
+sub inv {
+    __PACKAGE__->new(1 / $_[0]->{value});
+}
+
+sub neg {
+    __PACKAGE__->new(-($_[0]->{value}));
+}
+
+#
+## Equality
+#
+
+Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
+    $_[0]->{value} == $_[1]->{value};
+};
+
+Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
+    !1;
+};
+
+#
+## Number-theory methods
+#
+
+# TODO: add more.
+
+sub factorial {
+    __PACKAGE__->new($_[0]->{value}->copy->factorial);
+}
+
+Class::Multimethods::multimethod binomial => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{value}->copy->binomial($y->{value}));
+};
+
+#
+## Special functions
+#
+
+# TODO: add more.
+
+sub zeta {
+    __PACKAGE__->new($_[0]->{value}->copy->zeta);
+}
+
+#
+## Transformations
+#
+
+sub numeric {
+    $_[0]->{value};
+}
+
+sub pretty {
+    my ($x) = @_;
+    my $str = "$x->{value}";
+
+    if ((index($str, 'i') != -1 and $str ne 'i' and $str ne '-i')
+        or index($str, '/') != -1) {
+        "($str)";
+    }
+    else {
+        $str;
+    }
+}
+
+sub stringify {
+    my ($x) = @_;
+    "$x->{value}";
+}
+
+#
+## Alternatives
+#
+sub alternatives {
+    ($_[0]);
+}
+
+1;
