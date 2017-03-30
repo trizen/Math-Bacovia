@@ -6,26 +6,19 @@ use lib qw(
   ../../Math-AnyNum/lib
   );
 
+use ntheory qw(factorial);
 use Math::Bacovia qw(:all);
 
-say 1 + Fraction(3, 4);
-say 1 - Fraction(3, 4);
+#my $n = Symbol('n');
+my $n = Number(100);
 
-__END__
-use Math::BigNum qw(:constant);
+for my $f (((1 + 1 / $n)**$n)->alternatives) {
+    say $f->pretty;
+}
 
-
-
-
-say for Power(5, 1/2)->alternatives;
-say for Exp(Log(3) * 2)->alternatives;
-
-say ref(i);
-say +(i**2);
-
-my $x = Symbol('x', 43);
-say $x->tanh->numeric;
-#say ${$x->tanh->numeric};
-
-__END__
-say ((+$x)->tanh->atanh -> numeric);
+my $sum = Sum();
+foreach my $n (0 .. 5) {
+    $sum += Fraction(1, factorial($n));
+    say $sum;
+}
+say $sum->pretty;

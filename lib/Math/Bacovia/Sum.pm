@@ -26,14 +26,19 @@ Class::Multimethods::multimethod add => (__PACKAGE__, __PACKAGE__) => sub {
     __PACKAGE__->new(@{$x->{values}}, @{$y->{values}});
 };
 
-#~ Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia') => sub {     # needed?
-#~ my ($x, $y) = @_;
-#~ __PACKAGE__->new(@{$x->{values}}, $y);
-#~ };
+Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new(@{$x->{values}}, $y);
+};
 
 Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new(@{$x->{values}}, map { $_->neg } @{$y->{values}});
+};
+
+Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new(@{$x->{values}}, $y->neg);
 };
 
 Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia') => sub {

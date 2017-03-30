@@ -1,9 +1,11 @@
 Build.PL
 Changes
 examples/basic.pl
+examples/binomial_theorem.pl
 examples/fibonacci.pl
 examples/floor_function.pl
 examples/fractions.pl
+examples/summation.pl
 examples/test.pl
 examples/trigonometry.pl
 examples/zeta_2n.pl
