@@ -98,7 +98,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 #
 
 sub numeric {
-    $_[0]->{value}->copy;
+    $_[0]->{value};
 }
 
 sub pretty {

@@ -116,11 +116,12 @@ sub alternatives {
             # Identity: (a/b)^x = a^x / b^x
             if (ref($x) eq 'Math::Bacovia::Fraction') {
                 push @alt, $x->{num}**$y / $x->{den}**$y;
+                ##push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives;      # better, but slower...
             }
 
             # Identity: x^2 = x*x
-            #~ if (b == 2) {
-            #~ take(a * a)
+            #~ if ($y == 2) {
+            #~     push @alt, $x * $x;
             #~ }
 
             # Identity: x^log(y) = y^log(x)

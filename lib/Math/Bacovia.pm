@@ -128,8 +128,6 @@ use overload
     $s ? $y->pow($x) : $x->pow($y);
   },
 
-  #atan2 => sub { Math::AnyNum::atan2($_[2] ? (__PACKAGE__->new($_[1]), $_[0]) : ($_[0]->copy, $_[1])) },
-
   eq => sub { "$_[0]" eq "$_[1]" },
   ne => sub { "$_[0]" ne "$_[1]" },
 
