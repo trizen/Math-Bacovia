@@ -3,11 +3,7 @@
 use utf8;
 use 5.016;
 
-use lib qw(
-  ../lib
-  ../../Math-AnyNum/lib
-  );
-
+use lib qw(../lib);
 use Math::Bacovia qw(:all);
 
 #

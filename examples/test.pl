@@ -1,11 +1,7 @@
 use utf8;
 use 5.016;
 
-use lib qw(
-  ../lib
-  ../../Math-AnyNum/lib
-  );
-
+use lib qw(../lib);
 use ntheory qw(factorial);
 use Math::Bacovia qw(:all);
 
@@ -22,3 +18,5 @@ foreach my $n (0 .. 5) {
     say $sum;
 }
 say $sum->pretty;
+
+say exp(pi * i)->numeric;

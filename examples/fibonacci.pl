@@ -10,14 +10,8 @@ use 5.016;
 use Test::More;
 plan tests => 10;
 
-use lib qw(
-  ../lib
-  ../../Math-AnyNum/lib
-  );
-
-use Math::Bacovia qw(
-  pi Power Log Symbol
-  );
+use lib qw(../lib);
+use Math::Bacovia qw(pi Power Log Symbol);
 
 sub fibonacci {
     my ($n) = @_;
