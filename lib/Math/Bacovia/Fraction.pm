@@ -121,10 +121,10 @@ sub stringify {
 #
 
 sub alternatives {
-    my ($x) = @_;
+    my ($x, %opt) = @_;
 
-    my @a_num = $x->{num}->alternatives;
-    my @a_den = $x->{den}->alternatives;
+    my @a_num = $x->{num}->alternatives(%opt);
+    my @a_den = $x->{den}->alternatives(%opt);
 
     my @alt;
     foreach my $num (@a_num) {

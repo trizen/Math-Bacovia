@@ -116,6 +116,12 @@ Power(3, 2)
 9
 ```
 
+Option arguments:
+
+```perl
+    fast => 1       # will return faster
+```
+
 #### # `simple()`
 
 Returns a simplification of the self-expression.
@@ -128,6 +134,12 @@ Output:
 
 ```ruby
 Symbol("x")
+```
+
+Option arguments:
+
+```perl
+    fast => 1       # will return faster
 ```
 
 #### # `pretty()`

@@ -73,18 +73,20 @@ sub stringify {
 ## Alternatives
 #
 sub alternatives {
+    my ($self, %opt) = @_;
+
     my @a;
 
-    foreach my $a ($_[0]->{value}->alternatives) {
+    foreach my $a ($self->{value}->alternatives(%opt)) {
         push @a, __PACKAGE__->new($a);
 
         if (ref($a) eq 'Math::Bacovia::Product' and @{$a->{values}} == 2) {
             my ($x, $y) = @{$a->{values}};
             if (ref($x) eq 'Math::Bacovia::Log') {
-                push @a, 'Math::Bacovia::Power'->new($x->{value}, $y)->alternatives;
+                push @a, 'Math::Bacovia::Power'->new($x->{value}, $y)->alternatives(%opt);
             }
             elsif (ref($y) eq 'Math::Bacovia::Log') {
-                push @a, 'Math::Bacovia::Power'->new($y->{value}, $x)->alternatives;
+                push @a, 'Math::Bacovia::Power'->new($y->{value}, $x)->alternatives(%opt);
             }
         }
         elsif (ref($a) eq 'Math::Bacovia::Log') {

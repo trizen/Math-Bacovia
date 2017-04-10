@@ -64,10 +64,10 @@ sub stringify {
 ## Alternatives
 #
 sub alternatives {
-    my ($x) = @_;
+    my ($x, %opt) = @_;
 
     my @alt;
-    foreach my $x ($x->{value}->alternatives) {
+    foreach my $x ($x->{value}->alternatives(%opt)) {
         push @alt, __PACKAGE__->new($x);
 
         if (ref($x) eq 'Math::Bacovia::Exp') {

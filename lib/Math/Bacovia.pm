@@ -525,12 +525,12 @@ sub acsch {
 #
 
 sub simple {
-    my ($x) = @_;
+    my ($x, %opt) = @_;
     (
      List::UtilsBy::XS::min_by {
          length($_->pretty)
      }
-     ($x->alternatives)
+     ($x->alternatives(%opt))
     )[0];
 }
 

@@ -107,7 +107,9 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 ## Alternatives
 #
 sub alternatives {
-    my ($x) = @_;
+    my ($x, %opt) = @_;
+
+    $opt{fast} && return ($x);
 
     my @alt;
 
@@ -137,7 +139,7 @@ sub alternatives {
             push @alt, $prod;
         }
     }
-    map { [$_->alternatives] } @{$x->{values}};
+    map { [$_->alternatives(%opt)] } @{$x->{values}};
 
     List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
 }
