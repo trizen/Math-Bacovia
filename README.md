@@ -116,10 +116,10 @@ Power(3, 2)
 9
 ```
 
-Option arguments:
+The `alternatives()` method accepts the following options:
 
 ```perl
-    fast => 1       # will return faster
+    fast => 1       # will return fewer alternatives
 ```
 
 #### # `simple()`
@@ -136,7 +136,7 @@ Output:
 Symbol("x")
 ```
 
-Option arguments:
+The `simple()` method accepts the following options:
 
 ```perl
     fast => 1       # will return faster
