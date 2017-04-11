@@ -15,7 +15,9 @@ sub new {
         Math::Bacovia::Utils::check_type(\$denominator);
     }
     else {
-        $denominator = 'Math::Bacovia::Number'->new(Math::Bacovia::ONE);
+        $denominator = do {
+            state $_x = 'Math::Bacovia::Number'->new(Math::Bacovia::ONE);
+        };
     }
 
     bless {
@@ -35,21 +37,42 @@ sub inside {
 
 Class::Multimethods::multimethod add => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
-    __PACKAGE__->new($x->{num} * $y->{den} + $y->{num} * $x->{den}, $x->{den} * $y->{den});
+#<<<
+    __PACKAGE__->new(
+        $x->{num} * $y->{den} + $y->{num} * $x->{den},
+        $x->{den} * $y->{den}
+    );
+#>>>
 };
 
 Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Number') => sub {
-    $_[0] + __PACKAGE__->new($_[1]);
+    my ($x, $y) = @_;
+#<<<
+    __PACKAGE__->new(
+        $x->{num} + $x->{den} * $y,
+        $x->{den}
+    );
+#>>>
 };
 
 Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
-    $x->add($y->neg);
+#<<<
+    __PACKAGE__->new(
+        $x->{num} * $y->{den} - $y->{num} * $x->{den},
+        $x->{den} * $y->{den}
+    );
+#>>>
 };
 
 Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Number') => sub {
     my ($x, $y) = @_;
-    $x->add(-$y);
+#<<<
+    __PACKAGE__->new(
+        $x->{num} - $x->{den} * $y,
+        $x->{den}
+    );
+#>>>
 };
 
 Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
@@ -69,17 +92,12 @@ Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
 
 Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Number') => sub {
     my ($x, $y) = @_;
-    __PACKAGE__->new($x->{num}, $x->{den} * $y,);
+    __PACKAGE__->new($x->{num}, $x->{den} * $y);
 };
 
 sub inv {
     my ($x) = @_;
     __PACKAGE__->new($x->{den}, $x->{num});
-}
-
-sub neg {
-    my ($x) = @_;
-    __PACKAGE__->new(-$x->{num}, $x->{den});
 }
 
 #
@@ -108,7 +126,15 @@ sub numeric {
 
 sub pretty {
     my ($x) = @_;
-    '(' . $x->{num}->pretty() . '/' . $x->{den}->pretty() . ')';
+
+    my $num = $x->{num}->pretty();
+    my $den = $x->{den}->pretty();
+
+    if ($den eq '1') {
+        return $num;
+    }
+
+    "($num/$den)";
 }
 
 sub stringify {
@@ -129,16 +155,21 @@ sub alternatives {
     my @alt;
     foreach my $num (@a_num) {
         foreach my $den (@a_den) {
-            push @alt, $num / $den;
+
+            #push @alt, $num / $den;
             push @alt, __PACKAGE__->new($num, $den);
 
             if ($den == 1) {
                 push @alt, $num;
             }
+
+            if ($num == 1) {
+                push @alt, $den->inv;
+            }
         }
     }
 
-    List::UtilsBy::XS::uniq_by { "$_" } @alt;
+    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
 }
 
 1;

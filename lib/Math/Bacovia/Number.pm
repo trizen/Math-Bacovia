@@ -43,9 +43,14 @@ Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     __PACKAGE__->new($x->{value} - $y->{value});
 };
 
-Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+#~ Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+#~ my ($x, $y) = @_;
+#~ 'Math::Bacovia::Fraction'->new($x)->sub($y);
+#~ };
+
+Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
     my ($x, $y) = @_;
-    'Math::Bacovia::Fraction'->new($x)->sub($y);
+    'Math::Bacovia::Difference'->new($x)->sub($y);
 };
 
 Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
@@ -56,6 +61,11 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
 Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
     my ($x, $y) = @_;
     'Math::Bacovia::Fraction'->new($x)->mul($y);
+};
+
+Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
+    my ($x, $y) = @_;
+    'Math::Bacovia::Difference'->new($x)->mul($y);
 };
 
 Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {

@@ -37,6 +37,9 @@
          "file" : "lib/Math/Bacovia.pm",
          "version" : "0.01"
       },
+      "Math::Bacovia::Difference" : {
+         "file" : "lib/Math/Bacovia/Difference.pm"
+      },
       "Math::Bacovia::Exp" : {
          "file" : "lib/Math/Bacovia/Exp.pm"
       },

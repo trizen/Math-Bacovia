@@ -21,7 +21,7 @@ my $x = Symbol('x');
 my $y = Symbol('y');
 
 say $x+$y;               #=> Sum(Symbol("x"), Symbol("y"))
-say $x-$y;               #=> Sum(Symbol("x"), Product(-1, Symbol("y")))
+say $x-$y;               #=> Difference(Symbol("x"), Symbol("y"))
 say $x*$y;               #=> Product(Symbol("x"), Symbol("y"))
 say $x/$y;               #=> Fraction(Symbol("x"), Symbol("y"))
 
@@ -72,6 +72,10 @@ Represents a symbolic value. Optionally, it can have a numeric value.
 #### # `Fraction(numerator, denominator)`
 
 Represents a symbolic fraction.
+
+#### # `Difference(minuend, subtrahend)`
+
+Represents a symbolic subtraction.
 
 #### # `Power(base, power)`
 

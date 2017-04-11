@@ -8,19 +8,6 @@ use List::UtilsBy::XS qw();
 use Class::Multimethods qw();
 use Math::AnyNum qw();
 
-#~ use parent qw(Exporter);
-
-#~ our @EXPORT_OK = qw(
-#~ Number
-#~ Log
-#~ Exp
-#~ Power
-#~ Product
-#~ Fraction
-#~ Sum
-#~ Symbol
-#~ );
-
 use constant {
               MONE => 'Math::AnyNum'->mone,
               ZERO => 'Math::AnyNum'->zero,
@@ -32,6 +19,7 @@ use Math::Bacovia::Exp;
 use Math::Bacovia::Log;
 use Math::Bacovia::Power;
 use Math::Bacovia::Fraction;
+use Math::Bacovia::Difference;
 use Math::Bacovia::Number;
 use Math::Bacovia::Sum;
 use Math::Bacovia::Product;
@@ -81,8 +69,21 @@ use overload
   '""' => sub { $_[0]->stringify },
   '0+' => sub { $_[0]->numeric },
 
-  '==' => sub { $_[0]->eq($_[1]) },
-  '!=' => sub { !($_[0]->eq($_[1])) },
+  '==' => sub {
+    my ($x, $y) = @_;
+
+    Math::Bacovia::Utils::check_type(\$y);
+
+    $x->eq($y);
+  },
+
+  '!=' => sub {
+    my ($x, $y) = @_;
+
+    Math::Bacovia::Utils::check_type(\$y);
+
+    !($x->eq($y));
+  },
 
   '++' => sub { $_[0]->add($ONE) },
   '--' => sub { $_[0]->sub($ONE) },
@@ -152,14 +153,15 @@ sub i() {
 }
 
 my %exported_functions = (
-                          Exp      => \&Exp,
-                          Log      => \&Log,
-                          Product  => \&Product,
-                          Sum      => \&Sum,
-                          Power    => \&Power,
-                          Symbol   => \&Symbol,
-                          Number   => \&Number,
-                          Fraction => \&Fraction,
+                          Exp        => \&Exp,
+                          Log        => \&Log,
+                          Product    => \&Product,
+                          Sum        => \&Sum,
+                          Power      => \&Power,
+                          Symbol     => \&Symbol,
+                          Number     => \&Number,
+                          Fraction   => \&Fraction,
+                          Difference => \&Difference,
                          );
 
 my %exported_constants = (
@@ -222,6 +224,10 @@ sub Fraction {
     'Math::Bacovia::Fraction'->new(@_);
 }
 
+sub Difference {
+    'Math::Bacovia::Difference'->new(@_);
+}
+
 sub Power {
     'Math::Bacovia::Power'->new(@_);
 }
@@ -253,7 +259,7 @@ Class::Multimethods::multimethod add => (__PACKAGE__, __PACKAGE__) => sub {
 
 Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
-    'Math::Bacovia::Sum'->new($x, $y->neg);
+    'Math::Bacovia::Difference'->new($x, $y);
 };
 
 Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
@@ -341,7 +347,7 @@ sub exp {
 
 sub neg {
     my ($x) = @_;
-    'Math::Bacovia::Product'->new($MONE, $x);
+    'Math::Bacovia::Difference'->new($ZERO, $x);
 }
 
 sub inv {

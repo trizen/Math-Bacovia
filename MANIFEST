@@ -2,6 +2,7 @@ Build.PL
 Changes
 examples/basic.pl
 examples/binomial_theorem.pl
+examples/difference.pl
 examples/fibonacci.pl
 examples/fibonacci_2.pl
 examples/floor_function.pl
@@ -12,6 +13,7 @@ examples/trigonometry.pl
 examples/zeta_2n.pl
 ignore.txt
 lib/Math/Bacovia.pm
+lib/Math/Bacovia/Difference.pm
 lib/Math/Bacovia/Exp.pm
 lib/Math/Bacovia/Fraction.pm
 lib/Math/Bacovia/Log.pm

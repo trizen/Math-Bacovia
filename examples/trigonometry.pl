@@ -6,7 +6,7 @@ use utf8;
 use 5.016;
 
 use Test::More;
-plan tests => 19;
+plan tests => 20;
 
 use lib qw(../lib);
 use Math::Bacovia qw(:all);
@@ -19,6 +19,8 @@ my $k = Symbol('k', -0.5);
 say "cosh(log(x)) = ", Log($x)->cosh->simple->pretty;
 say "sinh(log(x)) = ", Log($x)->sinh->simple->pretty;
 say "tanh(log(x)) = ", Log($x)->tanh->simple->pretty;
+
+is(Log($x)->cosh->simple, Fraction(Sum(1, Power(Symbol("x", 43), 2)), Product(2, Symbol("x", 43))));
 
 is((sin(+$z))->asin->numeric->round(-20), +1.5);
 is((sin(-$z))->asin->numeric->round(-20), -1.5);

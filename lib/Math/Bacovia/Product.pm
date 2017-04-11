@@ -46,11 +46,6 @@ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
     __PACKAGE__->new(map { $_**$y } @{$x->{values}});
 };
 
-sub neg {
-    my ($x) = @_;
-    __PACKAGE__->new(-1, @{$x->{values}});
-}
-
 sub inv {
     my ($x) = @_;
     __PACKAGE__->new(map { $_->inv } @{$x->{values}});
