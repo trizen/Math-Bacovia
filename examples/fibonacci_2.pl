@@ -13,12 +13,13 @@ plan tests => 10;
 use lib qw(../lib);
 use Math::Bacovia qw(Power Symbol Fraction);
 
-my $S = Fraction(Power(5, '1/2') + 1, 2);
-my $T = Fraction(Power(5, '1/2') - 1, 2);
+my $P = Power(5, '1/2');
+my $S = Fraction($P + 1, 2);
+my $T = $S->inv;
 
 sub fibonacci {
     my ($n) = @_;
-    Fraction(($S**$n - (-$T)**$n), Power(5, '1/2'));
+    Fraction(($S**$n - (-$T)**$n), $P);
 }
 
 my @fibs = qw(0 1 1 2 3 5 8 13 21 34);

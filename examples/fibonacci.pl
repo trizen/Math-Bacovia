@@ -11,12 +11,12 @@ use Test::More;
 plan tests => 10;
 
 use lib qw(../lib);
-use Math::Bacovia qw(pi Power Symbol);
+use Math::Bacovia qw(pi Power Symbol Fraction);
 
 sub fibonacci {
     my ($n) = @_;
     state $S = Power(5, '1/2');
-    (((1 + $S) / 2)**$n - ((2 / (1 + $S))**$n * cos(pi * $n))) / $S;
+    Fraction(Fraction($S + 1, 2)**$n - (Fraction(2, $S + 1)**$n * cos(pi * $n)), $S);
 }
 
 my @fibs = qw(0 1 1 2 3 5 8 13 21 34);
