@@ -54,6 +54,11 @@ Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Number') =
     __PACKAGE__->new($x->{minuend} + $y, $x->{subtrahend});
 };
 
+Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{minuend} + $y, $x->{subtrahend});
+};
+
 #
 ## (a-b) - (x-y) = (a+y) - (b+x)
 #
@@ -73,6 +78,11 @@ Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Number') =
     __PACKAGE__->new($x->{minuend}, $x->{subtrahend} + $y);
 };
 
+Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{minuend}, $x->{subtrahend} + $y);
+};
+
 #
 ## (a-b) * (x-y) = (a*x + b*y) - (b*x + a*y)
 #
@@ -88,6 +98,11 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
 };
 
 Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Number') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{minuend} * $y, $x->{subtrahend} * $y);
+};
+
+Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Fraction') => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{minuend} * $y, $x->{subtrahend} * $y);
 };

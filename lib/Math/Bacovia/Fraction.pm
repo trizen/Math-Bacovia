@@ -55,6 +55,16 @@ Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Number') =
 #>>>
 };
 
+Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
+    my ($x, $y) = @_;
+#<<<
+    __PACKAGE__->new(
+        $x->{num} + $x->{den} * $y,
+        $x->{den}
+    );
+#>>>
+};
+
 Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
 #<<<
@@ -75,6 +85,16 @@ Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Number') =
 #>>>
 };
 
+Class::Multimethods::multimethod sub => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
+    my ($x, $y) = @_;
+#<<<
+    __PACKAGE__->new(
+        $x->{num} - $x->{den} * $y,
+        $x->{den}
+    );
+#>>>
+};
+
 Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{num} * $y->{num}, $x->{den} * $y->{den});
@@ -85,12 +105,22 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Number') =
     __PACKAGE__->new($x->{num} * $y, $x->{den});
 };
 
+Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{num} * $y, $x->{den});
+};
+
 Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{num} * $y->{den}, $x->{den} * $y->{num});
 };
 
 Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Number') => sub {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x->{num}, $x->{den} * $y);
+};
+
+Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{num}, $x->{den} * $y);
 };

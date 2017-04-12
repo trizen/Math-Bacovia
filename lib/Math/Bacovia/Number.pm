@@ -38,6 +38,11 @@ Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Fraction')
     'Math::Bacovia::Fraction'->new($x)->add($y);
 };
 
+Class::Multimethods::multimethod add => (__PACKAGE__, 'Math::Bacovia::Difference') => sub {
+    my ($x, $y) = @_;
+    'Math::Bacovia::Difference'->new($x)->add($y);
+};
+
 Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
     __PACKAGE__->new($x->{value} - $y->{value});
