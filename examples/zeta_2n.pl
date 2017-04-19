@@ -7,7 +7,6 @@ use 5.016;
 
 use lib qw(../lib);
 use Math::AnyNum;
-use ntheory qw(bernfrac);
 use Math::Bacovia qw(tau Number Fraction);
 
 sub bernoulli {
@@ -29,7 +28,7 @@ sub bernoulli {
 
 sub zeta_2n {
     my ($n)  = @_;
-    my $bern = Fraction(bernfrac(2 * $n));
+    my $bern = Number(bernoulli(2 * $n));
     my $fac  = Number(Math::AnyNum->new(2 * $n)->factorial);
     (-1)**($n + 1) * $bern * tau**(2 * $n) / ($fac * 2);
 }
@@ -37,22 +36,3 @@ sub zeta_2n {
 foreach my $n (1 .. 5) {
     say zeta_2n($n)->simple->pretty;
 }
-
-__END__
-var expressions = [
-    '((1 / 4) * (-4) * (1/6) * log(-1)^2)',
-    '((1 / 48) * (16) * (1/30) * log(-1)^4)',
-    '((1 / 1440) * (-64) * (1/42) * log(-1)^6)',
-    '((1 / 80640) * (256) * (1/30) * log(-1)^8)',
-    '((1 / 7257600) * (-1024) * (5/66) * log(-1)^10)',
-]
-
-assert_eq(gather {
-    for n in (1..5) {
-        var z = zeta_2n(n).simple.pretty
-        say "zeta(#{2*n}) = #{z}"
-        take(z)
-    }
-}, expressions)
-
-say "** Test passed!"
