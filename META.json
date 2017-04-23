@@ -28,7 +28,8 @@
          "requires" : {
             "Class::Multimethods" : "1.7",
             "List::UtilsBy::XS" : "0",
-            "Math::AnyNum" : "0.01"
+            "Math::AnyNum" : "0.01",
+            "perl" : "5.014"
          }
       }
    },

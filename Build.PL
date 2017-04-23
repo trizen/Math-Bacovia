@@ -19,6 +19,7 @@ my $builder = Module::Build->new(
                         'Test::More' => 0,
                        },
      requires => {
+                  'perl'                => 5.014,
                   'Math::AnyNum'        => 0.01,
                   'List::UtilsBy::XS'   => 0,
                   'Class::Multimethods' => 1.70,

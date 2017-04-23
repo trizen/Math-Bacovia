@@ -1,6 +1,6 @@
 package Math::Bacovia::Utils;
 
-use 5.016;
+use 5.014;
 use warnings;
 
 no warnings 'recursion';
@@ -26,23 +26,43 @@ sub check_type($) {
 }
 
 sub cartesian(&@) {
-    my ($callback, @C) = @_;
+    my ($callback, @arrs) = @_;
 
-    my (@c, @r);
+    my ($more, @lengths);
 
-    sub {
-        if (@c < @C) {
-            for my $item (@{$C[@c]}) {
-                CORE::push(@c, $item);
-                __SUB__->();
-                CORE::pop(@c);
-            }
+    foreach my $arr (@arrs) {
+        my $end = $#{$arr};
+
+        if ($end >= 0) {
+            $more ||= 1;
         }
         else {
-            $callback->(@c);
+            $more = 0;
+            last;
         }
-      }
-      ->();
+
+        push @lengths, $end;
+    }
+
+    my @temp;
+    my @indices = (0) x @arrs;
+
+    while ($more) {
+        @temp = @indices;
+
+        for (my $i = $#indices ; $i >= 0 ; --$i) {
+            if ($indices[$i] == $lengths[$i]) {
+                $indices[$i] = 0;
+                $more = 0 if $i == 0;
+            }
+            else {
+                ++$indices[$i];
+                last;
+            }
+        }
+
+        $callback->(map { $_->[CORE::shift(@temp)] } @arrs);
+    }
 }
 
 1;

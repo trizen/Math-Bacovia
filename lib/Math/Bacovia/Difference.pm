@@ -1,6 +1,6 @@
 package Math::Bacovia::Difference;
 
-use 5.016;
+use 5.014;
 use warnings;
 
 use Class::Multimethods;
