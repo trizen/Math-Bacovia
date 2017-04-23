@@ -6,7 +6,7 @@ Math::Bacovia is a symbolic math library, with support for numerical evaluation 
 
 ```ruby
 use utf8;
-use 5.016;
+use 5.014;
 
 use Math::Bacovia qw(
     Log

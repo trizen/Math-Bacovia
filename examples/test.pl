@@ -1,5 +1,5 @@
 use utf8;
-use 5.016;
+use 5.014;
 
 use lib qw(../lib);
 use ntheory qw(factorial);
@@ -33,6 +33,5 @@ say Difference(12, 0)->simple->pretty;
 
 say Fraction(10, 5)->simple->pretty;
 
-
-say Product(3, 4)->neg*12;
-say +(Product(3, 4)->neg*12)->pretty;
+say Product(3, 4)->neg * 12;
+say +(Product(3, 4)->neg * 12)->pretty;

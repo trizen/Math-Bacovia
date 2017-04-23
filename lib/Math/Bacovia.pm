@@ -41,7 +41,7 @@ our $VERSION = '0.01';
 
 B<Math::Bacovia> is symbolic math library, with support for evaluating expressions numerically.
 
-    use 5.016;
+    use 5.014;
     use Math::Bacovia qw(Symbol);
 
     my $n = Symbol(n => 42);
