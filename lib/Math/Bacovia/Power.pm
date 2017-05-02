@@ -15,7 +15,7 @@ sub new {
         Math::Bacovia::Utils::check_type(\$power);
     }
     else {
-        $power = 'Math::Bacovia::Number'->new(Math::Bacovia::ONE);
+        $power = $Math::Bacovia::ONE;
     }
 
     bless {

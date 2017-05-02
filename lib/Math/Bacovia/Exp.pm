@@ -83,10 +83,10 @@ sub alternatives {
         if (ref($a) eq 'Math::Bacovia::Product' and @{$a->{values}} == 2) {
             my ($x, $y) = @{$a->{values}};
             if (ref($x) eq 'Math::Bacovia::Log') {
-                push @a, 'Math::Bacovia::Power'->new($x->{value}, $y)->alternatives(%opt);
+                push @a, 'Math::Bacovia::Power'->new($x->{value}, $y);
             }
             elsif (ref($y) eq 'Math::Bacovia::Log') {
-                push @a, 'Math::Bacovia::Power'->new($y->{value}, $x)->alternatives(%opt);
+                push @a, 'Math::Bacovia::Power'->new($y->{value}, $x);
             }
         }
         elsif (ref($a) eq 'Math::Bacovia::Log') {

@@ -59,11 +59,11 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =cut
 
-state $MONE = 'Math::Bacovia::Number'->new(MONE);
-state $ZERO = 'Math::Bacovia::Number'->new(ZERO);
-state $ONE  = 'Math::Bacovia::Number'->new(ONE);
-state $TWO  = 'Math::Bacovia::Number'->new(ONE +ONE);
-state $HALF = 'Math::Bacovia::Number'->new(ONE / (ONE +ONE));
+our $MONE = 'Math::Bacovia::Number'->new(MONE);
+our $ZERO = 'Math::Bacovia::Number'->new(ZERO);
+our $ONE  = 'Math::Bacovia::Number'->new(ONE);
+our $TWO  = 'Math::Bacovia::Number'->new(ONE + ONE);
+our $HALF = 'Math::Bacovia::Number'->new(ONE / (ONE + ONE));
 
 use overload
   '""' => sub { $_[0]->stringify },

@@ -4,7 +4,7 @@ Math::Bacovia is a symbolic math library, with support for numerical evaluation 
 
 # EXAMPLE
 
-```ruby
+```perl
 use utf8;
 use 5.014;
 
@@ -108,13 +108,13 @@ Bellow we describe the special methods provided by this library:
 
 Returns an array with alternative representations from the self-expression.
 
-```ruby
+```perl
 say for Exp(Log(3) * 2)->alternatives;
 ```
 
 Output:
 
-```ruby
+```perl
 Exp(Product(Log(3), 2))
 Power(3, 2)
 9
@@ -130,13 +130,13 @@ The `alternatives()` method accepts the following options:
 
 Returns a simplification of the self-expression.
 
-```ruby
+```perl
 say Exp(Log(Log(Exp(Exp(Log(Symbol('x')))))))->simple;
 ```
 
 Output:
 
-```ruby
+```perl
 Symbol("x")
 ```
 
@@ -150,7 +150,7 @@ The `simple()` method accepts the following options:
 
 Returns a human-readable stringification of the self-expression.
 
-```ruby
+```perl
 say Power(3, Log(Fraction(1, 2)))->pretty;
 ```
 
@@ -163,7 +163,7 @@ Output:
 
 Evaluates the self-expression numerically and returns the result as a Number or a Complex object.
 
-```ruby
+```perl
 my $x = Symbol('x');
 my $expr = ($x**2 - $x + 41);
 

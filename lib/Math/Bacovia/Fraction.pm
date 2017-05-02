@@ -9,15 +9,18 @@ use parent qw(Math::Bacovia);
 sub new {
     my ($class, $numerator, $denominator) = @_;
 
-    Math::Bacovia::Utils::check_type(\$numerator);
+    if (defined($numerator)) {
+        Math::Bacovia::Utils::check_type(\$numerator);
+    }
+    else {
+        $numerator = $Math::Bacovia::ZERO;
+    }
 
     if (defined($denominator)) {
         Math::Bacovia::Utils::check_type(\$denominator);
     }
     else {
-        $denominator = do {
-            state $_x = 'Math::Bacovia::Number'->new(Math::Bacovia::ONE);
-        };
+        $denominator = $Math::Bacovia::ONE;
     }
 
     bless {
@@ -186,15 +189,14 @@ sub alternatives {
     foreach my $num (@a_num) {
         foreach my $den (@a_den) {
 
-            #push @alt, $num / $den;
-            push @alt, __PACKAGE__->new($num, $den);
-
-            if ($den == 1) {
+            if ($den == $Math::Bacovia::ONE) {
                 push @alt, $num;
             }
-
-            if ($num == 1) {
+            elsif ($num == $Math::Bacovia::ONE) {
                 push @alt, $den->inv;
+            }
+            else {
+                push @alt, __PACKAGE__->new($num, $den);
             }
         }
     }

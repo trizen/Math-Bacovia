@@ -20,8 +20,12 @@ sub check_type($) {
             $$ref = 'Math::Bacovia::Number'->new($$ref);
         }
     }
-    else {
+    elsif (defined($$ref)) {
         $$ref = 'Math::Bacovia::Number'->new($$ref);
+    }
+    else {
+        require Carp;
+        Carp::croak("[ERROR] Undefined value!");
     }
 }
 

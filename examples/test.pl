@@ -35,3 +35,11 @@ say Fraction(10, 5)->simple->pretty;
 
 say Product(3, 4)->neg * 12;
 say +(Product(3, 4)->neg * 12)->pretty;
+
+{
+    my $n = Symbol('n', 100);
+    my $f = Fraction(1, 4 * $n * Power(3, Fraction(1, 2))) * Exp(pi * Power(Fraction(2 * $n,, 3), Fraction(1, 2)));
+    say $f->pretty;
+    say $f->simple->pretty;
+    say $f->numeric;
+}

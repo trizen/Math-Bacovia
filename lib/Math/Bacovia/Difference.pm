@@ -9,15 +9,18 @@ use parent qw(Math::Bacovia);
 sub new {
     my ($class, $minuend, $subtrahend) = @_;
 
-    Math::Bacovia::Utils::check_type(\$minuend);
+    if (defined($minuend)) {
+        Math::Bacovia::Utils::check_type(\$minuend);
+    }
+    else {
+        $minuend = $Math::Bacovia::ZERO;
+    }
 
     if (defined($subtrahend)) {
         Math::Bacovia::Utils::check_type(\$subtrahend);
     }
     else {
-        $subtrahend = do {
-            state $_x = 'Math::Bacovia::Number'->new(Math::Bacovia::ZERO);
-        };
+        $subtrahend = $Math::Bacovia::ZERO;
     }
 
     bless {
@@ -172,15 +175,14 @@ sub alternatives {
     foreach my $minuend (@a_num) {
         foreach my $subtrahend (@a_den) {
 
-            #push @alt, $minuend - $subtrahend;
-            push @alt, __PACKAGE__->new($minuend, $subtrahend);
-
-            if ($subtrahend == 0) {
+            if ($subtrahend == $Math::Bacovia::ZERO) {
                 push @alt, $minuend;
             }
-
-            if ($minuend == 0) {
+            elsif ($minuend == $Math::Bacovia::ZERO) {
                 push @alt, $subtrahend->neg;
+            }
+            else {
+                push @alt, __PACKAGE__->new($minuend, $subtrahend);
             }
         }
     }
