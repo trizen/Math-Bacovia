@@ -103,13 +103,18 @@ sub alternatives {
             push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
             push @alt, $x**$y;
 
+            # Identity: x^0 = 1
+            if ($y == $Math::Bacovia::ZERO) {
+                push @alt, $Math::Bacovia::ONE;
+            }
+
             # Identity: 1^x = 1
-            if ($x == 1) {
+            if ($x == $Math::Bacovia::ONE) {
                 push @alt, $x;
             }
 
             # Identity: x^1 = x
-            if ($y == 1) {
+            if ($y == $Math::Bacovia::ONE) {
                 push @alt, $x;
             }
 
