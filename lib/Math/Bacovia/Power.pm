@@ -147,7 +147,8 @@ sub alternatives {
 
             # Identity: x^(y/log(x)) = exp(y)
             if (    ref($y) eq 'Math::Bacovia::Fraction'
-                and ref($y->{den}) eq 'Math::Bacovia::Log') {
+                and ref($y->{den}) eq 'Math::Bacovia::Log'
+                and $x == $y->{den}{value}) {
                 if (ref($y->{num}) eq 'Math::Bacovia::Log') {
                     push @alt, $y->{num}{value};
                 }
