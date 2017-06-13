@@ -144,6 +144,17 @@ sub alternatives {
             if (ref($x) eq 'Math::Bacovia::Exp') {
                 push @alt, 'Math::Bacovia::Exp'->new($x->{value} * $y);
             }
+
+            # Identity: x^(y/log(x)) = exp(y)
+            if (    ref($y) eq 'Math::Bacovia::Fraction'
+                and ref($y->{den}) eq 'Math::Bacovia::Log') {
+                if (ref($y->{num}) eq 'Math::Bacovia::Log') {
+                    push @alt, $y->{num}{value};
+                }
+                else {
+                    push @alt, 'Math::Bacovia::Exp'->new($y->{num})->alternatives;
+                }
+            }
         }
     }
 
