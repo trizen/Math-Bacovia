@@ -8,7 +8,7 @@ use utf8;
 use 5.014;
 
 use Test::More;
-plan tests => 10;
+plan tests => 11;
 
 use lib qw(../lib);
 use Math::Bacovia qw(Power Symbol Fraction);
@@ -33,4 +33,7 @@ my $simple = fibonacci(Symbol('n', 12))->simple;
 $simple->numeric eq '144'
   or die "Error in simplification!";
 
-say $simple->simple->pretty;
+my $f = $simple->simple->pretty;
+is($f, '((((1 + 5^(1/2))/2)^n - (-(2/(1 + 5^(1/2))))^n)/5^(1/2))');
+
+say $f;
