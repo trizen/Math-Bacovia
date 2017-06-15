@@ -29,7 +29,8 @@ Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
 };
 
 sub neg {
-    __PACKAGE__->new($_[0]->{value}->inv);
+    my ($x) = @_;
+    $x->{_neg} //= __PACKAGE__->new($x->{value}->inv);
 }
 
 #
@@ -49,7 +50,8 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 #
 
 sub numeric {
-    CORE::log($_[0]->{value}->numeric);
+    my ($x) = @_;
+    $x->{_num} //= CORE::log($x->{value}->numeric);
 }
 
 sub pretty {

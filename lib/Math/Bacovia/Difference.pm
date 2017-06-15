@@ -112,7 +112,7 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Fraction')
 
 sub neg {
     my ($x) = @_;
-    __PACKAGE__->new($x->{subtrahend}, $x->{minuend});
+    $x->{_neg} //= __PACKAGE__->new($x->{subtrahend}, $x->{minuend});
 }
 
 #
@@ -136,7 +136,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    $x->{minuend}->numeric - $x->{subtrahend}->numeric;
+    $x->{_num} //= $x->{minuend}->numeric - $x->{subtrahend}->numeric;
 }
 
 sub pretty {

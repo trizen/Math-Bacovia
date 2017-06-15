@@ -130,7 +130,7 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Difference
 
 sub inv {
     my ($x) = @_;
-    __PACKAGE__->new($x->{den}, $x->{num});
+    $x->{_inv} //= __PACKAGE__->new($x->{den}, $x->{num});
 }
 
 #
@@ -154,7 +154,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    $x->{num}->numeric / $x->{den}->numeric;
+    $x->{_num} //= $x->{num}->numeric / $x->{den}->numeric;
 }
 
 sub pretty {
@@ -196,12 +196,13 @@ sub alternatives {
                 if ($den == $Math::Bacovia::ONE) {
                     push @alt, $num;
                 }
-                elsif ($num == $Math::Bacovia::ONE) {
-                    push @alt, $den->inv;
-                }
-                else {
-                    push @alt, __PACKAGE__->new($num, $den);
-                    ##push @alt, $num / $den;    # better, but slower...
+
+                push @alt, __PACKAGE__->new($num, $den);
+                ##push @alt, $num / $den;    # better, but slower...
+
+                if (    ref($num) eq 'Math::Bacovia::Number'
+                    and ref($den) eq 'Math::Bacovia::Number') {
+                    push @alt, $num / $den;
                 }
             }
         }

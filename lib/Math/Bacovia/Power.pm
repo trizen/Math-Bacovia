@@ -40,7 +40,7 @@ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
 
 sub inv {
     my ($x) = @_;
-    __PACKAGE__->new($x->{base}, $x->{power}->neg);
+    $x->{_inv} //= __PACKAGE__->new($x->{base}, $x->{power}->neg);
 }
 
 #
@@ -63,7 +63,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    ($x->{base}->numeric)**($x->{power}->numeric);
+    $x->{_num} //= ($x->{base}->numeric)**($x->{power}->numeric);
 }
 
 sub pretty {
@@ -103,8 +103,9 @@ sub alternatives {
         foreach my $x (@a1) {
             foreach my $y (@a2) {
 
-                push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
                 push @alt, $x**$y;
+                push @alt, __PACKAGE__->new($x, $y);
+                ##push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
 
                 # Identity: x^0 = 1
                 if ($y == $Math::Bacovia::ZERO) {

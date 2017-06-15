@@ -37,7 +37,7 @@ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
 
 sub inv {
     my ($x) = @_;
-    __PACKAGE__->new($x->{value}->neg);
+    $x->{_inv} //= __PACKAGE__->new($x->{value}->neg);
 }
 
 #
@@ -58,7 +58,8 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 #
 
 sub numeric {
-    CORE::exp($_[0]->{value}->numeric);
+    my ($x) = @_;
+    $x->{_num} //= CORE::exp($x->{value}->numeric);
 }
 
 sub pretty {

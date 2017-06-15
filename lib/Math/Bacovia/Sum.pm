@@ -53,7 +53,7 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia') => sub {
 
 sub neg {
     my ($x) = @_;
-    __PACKAGE__->new(map { $_->neg } @{$x->{values}});
+    $x->{_neg} //= __PACKAGE__->new(map { $_->neg } @{$x->{values}});
 }
 
 #
@@ -62,11 +62,13 @@ sub neg {
 
 sub numeric {
     my ($x) = @_;
-    my $sum = Math::Bacovia::ZERO;
-    foreach my $value (@{$x->{values}}) {
-        $sum += $value->numeric;
-    }
-    $sum;
+    $x->{_num} //= do {
+        my $sum = Math::Bacovia::ZERO;
+        foreach my $value (@{$x->{values}}) {
+            $sum += $value->numeric;
+        }
+        $sum;
+    };
 }
 
 sub pretty {

@@ -48,7 +48,7 @@ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
 
 sub inv {
     my ($x) = @_;
-    __PACKAGE__->new(map { $_->inv } @{$x->{values}});
+    $x->{_inv} //= __PACKAGE__->new(map { $_->inv } @{$x->{values}});
 }
 
 #
@@ -57,11 +57,13 @@ sub inv {
 
 sub numeric {
     my ($x) = @_;
-    my $prod = Math::Bacovia::ONE;
-    foreach my $value (@{$x->{values}}) {
-        $prod *= $value->numeric;
-    }
-    $prod;
+    $x->{_num} //= do {
+        my $prod = Math::Bacovia::ONE;
+        foreach my $value (@{$x->{values}}) {
+            $prod *= $value->numeric;
+        }
+        $prod;
+    };
 }
 
 sub pretty {
