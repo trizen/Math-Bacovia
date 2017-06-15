@@ -53,7 +53,7 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia') => sub {
 
 sub neg {
     my ($x) = @_;
-    __PACKAGE__->new(map { $_->neg } @{$x->{values}});
+    $x->{_neg} //= __PACKAGE__->new(map { $_->neg } @{$x->{values}});
 }
 
 #
@@ -62,22 +62,26 @@ sub neg {
 
 sub numeric {
     my ($x) = @_;
-    my $sum = Math::Bacovia::ZERO;
-    foreach my $value (@{$x->{values}}) {
-        $sum += $value->numeric;
-    }
-    $sum;
+    $x->{_num} //= do {
+        my $sum = Math::Bacovia::ZERO;
+        foreach my $value (@{$x->{values}}) {
+            $sum += $value->numeric;
+        }
+        $sum;
+    };
 }
 
 sub pretty {
     my ($x) = @_;
-    my @pretty = map { $_->pretty } @{$x->{values}};
-    @pretty ? ('(' . join(' + ', @pretty) . ')') : '0';
+    $x->{_pretty} //= do {
+        my @pretty = map { $_->pretty } @{$x->{values}};
+        @pretty ? ('(' . join(' + ', @pretty) . ')') : '0';
+    };
 }
 
 sub stringify {
     my ($x) = @_;
-    'Sum(' . join(', ', map { $_->stringify } @{$x->{values}}) . ')';
+    $x->{_str} //= 'Sum(' . join(', ', map { $_->stringify } @{$x->{values}}) . ')';
 }
 
 #
@@ -107,41 +111,43 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 ## Alternatives
 #
 sub alternatives {
-    my ($x, %opt) = @_;
+    my ($x) = @_;
 
-    $opt{fast} && return ($x);
+    $x->{_alt} //= do {
+        my @alt;
 
-    my @alt;
-
-    Math::Bacovia::Utils::cartesian {
-        my %table;
-        foreach my $v (@_) {
-            push @{$table{ref($v)}}, $v;
-        }
-
-        my @partial;
-        foreach my $group (values(%table)) {
-            my $sum = shift(@$group);
-            foreach my $v (@{$group}) {
-                $sum += $v;
-            }
-            push @partial, $sum;
-        }
-
-        if (@partial) {
-            @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
-
-            my $sum = shift(@partial);
-            foreach my $v (@partial) {
-                $sum += $v;
+        Math::Bacovia::Utils::cartesian {
+            my %table;
+            foreach my $v (@_) {
+                push @{$table{ref($v)}}, $v;
             }
 
-            push @alt, $sum;
-        }
-    }
-    map { [$_->alternatives(%opt)] } @{$x->{values}};
+            my @partial;
+            foreach my $group (values(%table)) {
+                my $sum = shift(@$group);
+                foreach my $v (@{$group}) {
+                    $sum += $v;
+                }
+                push @partial, $sum;
+            }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
+            if (@partial) {
+                @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
+
+                my $sum = shift(@partial);
+                foreach my $v (@partial) {
+                    $sum += $v;
+                }
+
+                push @alt, $sum;
+            }
+        }
+        map { [$_->alternatives] } @{$x->{values}};
+
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
+    };
+
+    @{$x->{_alt}};
 }
 
 1;

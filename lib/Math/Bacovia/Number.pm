@@ -84,16 +84,18 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Fraction')
 };
 
 #~ Class::Multimethods::multimethod pow => (__PACKAGE__, __PACKAGE__) => sub {
-#~ my ($x, $y) = @_;
-#~ __PACKAGE__->new($x->{value} ** $y->{value});
+    #~ my ($x, $y) = @_;
+    #~ __PACKAGE__->new($x->{value}**$y->{value});
 #~ };
 
 sub inv {
-    __PACKAGE__->new(1 / $_[0]->{value});
+    my ($x) = @_;
+    $x->{_inv} //= __PACKAGE__->new(1 / $x->{value});
 }
 
 sub neg {
-    __PACKAGE__->new(-($_[0]->{value}));
+    my ($x) = @_;
+    $x->{_neg} //= __PACKAGE__->new(-($x->{value}));
 }
 
 #
@@ -118,20 +120,23 @@ sub numeric {
 
 sub pretty {
     my ($x) = @_;
-    my $str = "$x->{value}";
 
-    if ((index($str, 'i') != -1 and $str ne 'i' and $str ne '-i')
-        or index($str, '/') != -1) {
-        "($str)";
-    }
-    else {
-        $str;
-    }
+    $x->{_pretty} //= do {
+        my $str = "$x->{value}";
+
+        if ((index($str, 'i') != -1 and $str ne 'i' and $str ne '-i')
+            or index($str, '/') != -1) {
+            "($str)";
+        }
+        else {
+            $str;
+        }
+    };
 }
 
 sub stringify {
     my ($x) = @_;
-    $x->{value}->stringify;
+    $x->{_str} //= $x->{value}->stringify;
 }
 
 #

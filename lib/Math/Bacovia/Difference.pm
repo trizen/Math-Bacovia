@@ -112,7 +112,7 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Fraction')
 
 sub neg {
     my ($x) = @_;
-    __PACKAGE__->new($x->{subtrahend}, $x->{minuend});
+    $x->{_neg} //= __PACKAGE__->new($x->{subtrahend}, $x->{minuend});
 }
 
 #
@@ -136,29 +136,31 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    $x->{minuend}->numeric - $x->{subtrahend}->numeric;
+    $x->{_num} //= $x->{minuend}->numeric - $x->{subtrahend}->numeric;
 }
 
 sub pretty {
     my ($x) = @_;
 
-    my $minuend    = $x->{minuend}->pretty();
-    my $subtrahend = $x->{subtrahend}->pretty();
+    $x->{_pretty} //= do {
+        my $minuend    = $x->{minuend}->pretty();
+        my $subtrahend = $x->{subtrahend}->pretty();
 
-    if ($minuend eq '0') {
-        return "(-$subtrahend)";
-    }
-
-    if ($subtrahend eq '0') {
-        return $minuend;
-    }
-
-    "($minuend - $subtrahend)";
+        if ($minuend eq '0') {
+            "(-$subtrahend)";
+        }
+        elsif ($subtrahend eq '0') {
+            $minuend;
+        }
+        else {
+            "($minuend - $subtrahend)";
+        }
+    };
 }
 
 sub stringify {
     my ($x) = @_;
-    "Difference(" . $x->{minuend}->stringify() . ', ' . $x->{subtrahend}->stringify() . ")";
+    $x->{_str} //= "Difference(" . $x->{minuend}->stringify() . ', ' . $x->{subtrahend}->stringify() . ")";
 }
 
 #
@@ -166,28 +168,33 @@ sub stringify {
 #
 
 sub alternatives {
-    my ($x, %opt) = @_;
+    my ($x) = @_;
 
-    my @a_num = $x->{minuend}->alternatives(%opt);
-    my @a_den = $x->{subtrahend}->alternatives(%opt);
+    $x->{_alt} //= do {
+        my @a_num = $x->{minuend}->alternatives;
+        my @a_den = $x->{subtrahend}->alternatives;
 
-    my @alt;
-    foreach my $minuend (@a_num) {
-        foreach my $subtrahend (@a_den) {
+        my @alt;
+        foreach my $minuend (@a_num) {
+            foreach my $subtrahend (@a_den) {
 
-            if ($subtrahend == $Math::Bacovia::ZERO) {
-                push @alt, $minuend;
-            }
-            elsif ($minuend == $Math::Bacovia::ZERO) {
-                push @alt, $subtrahend->neg;
-            }
-            else {
-                push @alt, __PACKAGE__->new($minuend, $subtrahend);
+                if ($subtrahend == $Math::Bacovia::ZERO) {
+                    push @alt, $minuend;
+                }
+                elsif ($minuend == $Math::Bacovia::ZERO) {
+                    push @alt, $subtrahend->neg;
+                }
+                else {
+                    push @alt, __PACKAGE__->new($minuend, $subtrahend);
+                    ##push @alt, $minuend - $subtrahend;    # better, but slower...
+                }
             }
         }
-    }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
+    };
+
+    @{$x->{_alt}};
 }
 
 1;

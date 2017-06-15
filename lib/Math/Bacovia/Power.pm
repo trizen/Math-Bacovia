@@ -40,7 +40,7 @@ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
 
 sub inv {
     my ($x) = @_;
-    __PACKAGE__->new($x->{base}, $x->{power}->neg);
+    $x->{_inv} //= __PACKAGE__->new($x->{base}, $x->{power}->neg);
 }
 
 #
@@ -63,91 +63,110 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    ($x->{base}->numeric)**($x->{power}->numeric);
+    $x->{_num} //= ($x->{base}->numeric)**($x->{power}->numeric);
 }
 
 sub pretty {
     my ($x) = @_;
 
-    my $base = $x->{base}->pretty();
-    my $pow  = $x->{power}->pretty();
+    $x->{_pretty} //= do {
+        my $base = $x->{base}->pretty();
+        my $pow  = $x->{power}->pretty();
 
-    if (substr($base, 0, 1) eq '-'
-        or ref($x->{base}) eq __PACKAGE__) {
-        "($base)^$pow";
-    }
-    else {
-        "$base^$pow";
-    }
+        if (substr($base, 0, 1) eq '-'
+            or ref($x->{base}) eq __PACKAGE__) {
+            "($base)^$pow";
+        }
+        else {
+            "$base^$pow";
+        }
+      }
 }
 
 sub stringify {
     my ($x) = @_;
-    "Power(" . $x->{base}->stringify() . ', ' . $x->{power}->stringify() . ")";
+    $x->{_str} //= "Power(" . $x->{base}->stringify() . ', ' . $x->{power}->stringify() . ")";
 }
 
 #
 ## Alternatives
 #
 sub alternatives {
-    my ($self, %opt) = @_;
+    my ($self) = @_;
 
-    my @a1 = $self->{base}->alternatives(%opt);
-    my @a2 = $self->{power}->alternatives(%opt);
+    $self->{_alt} //= do {
+        my @a1 = $self->{base}->alternatives;
+        my @a2 = $self->{power}->alternatives;
 
-    my @alt;
+        my @alt;
 
-    foreach my $x (@a1) {
-        foreach my $y (@a2) {
+        foreach my $x (@a1) {
+            foreach my $y (@a2) {
 
-            push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
-            push @alt, $x**$y;
+                push @alt, $x**$y;
+                push @alt, __PACKAGE__->new($x, $y);
+                ##push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
 
-            # Identity: x^0 = 1
-            if ($y == $Math::Bacovia::ZERO) {
-                push @alt, $Math::Bacovia::ONE;
-            }
+                # Identity: x^0 = 1
+                if ($y == $Math::Bacovia::ZERO) {
+                    push @alt, $Math::Bacovia::ONE;
+                }
 
-            # Identity: 1^x = 1
-            if ($x == $Math::Bacovia::ONE) {
-                push @alt, $x;
-            }
+                # Identity: 1^x = 1
+                if ($x == $Math::Bacovia::ONE) {
+                    push @alt, $x;
+                }
 
-            # Identity: x^1 = x
-            if ($y == $Math::Bacovia::ONE) {
-                push @alt, $x;
-            }
+                # Identity: x^1 = x
+                if ($y == $Math::Bacovia::ONE) {
+                    push @alt, $x;
+                }
 
-            # Identity: (a/b)^x = a^x / b^x
-            if (ref($x) eq 'Math::Bacovia::Fraction') {
-                push @alt, $x->{num}**$y / $x->{den}**$y;
-                ##push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives(%opt);      # better, but slower...
-            }
+                # Identity: (a/b)^x = a^x / b^x
+                if (ref($x) eq 'Math::Bacovia::Fraction') {
+                    push @alt, $x->{num}**$y / $x->{den}**$y;
+                    ##push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives;    # better, but slower...
+                }
 
-            # Identity: x^2 = x*x
-            #~ if ($y == 2) {
-            #~     push @alt, $x * $x;
-            #~ }
+                # Identity: x^2 = x*x
+                #~ if ($y == 2) {
+                #~     push @alt, $x * $x;
+                #~ }
 
-            # Identity: x^log(y) = y^log(x)
-            if (ref($y) eq 'Math::Bacovia::Log') {
-                push @alt, $y->{value}**('Math::Bacovia::Log'->new($x));
-            }
+                # Identity: x^log(y) = y^log(x)
+                if (ref($y) eq 'Math::Bacovia::Log') {
+                    push @alt, $y->{value}**('Math::Bacovia::Log'->new($x));
+                }
 
-            # Identity: exp(x)^log(y) = y^x
-            if (    ref($x) eq 'Math::Bacovia::Exp'
-                and ref($y) eq 'Math::Bacovia::Exp') {
-                push @alt, ($y->{value}**$x->{value});
-            }
+                # Identity: exp(x)^log(y) = y^x
+                if (    ref($x) eq 'Math::Bacovia::Exp'
+                    and ref($y) eq 'Math::Bacovia::Exp') {
+                    push @alt, ($y->{value}**$x->{value});
+                }
 
-            # Identity: exp(x)^y = exp(y*x)
-            if (ref($x) eq 'Math::Bacovia::Exp') {
-                push @alt, 'Math::Bacovia::Exp'->new($x->{value} * $y);
+                # Identity: exp(x)^y = exp(y*x)
+                if (ref($x) eq 'Math::Bacovia::Exp') {
+                    push @alt, 'Math::Bacovia::Exp'->new($x->{value} * $y);
+                }
+
+                # Identity: x^(y/log(x)) = exp(y)
+                if (    ref($y) eq 'Math::Bacovia::Fraction'
+                    and ref($y->{den}) eq 'Math::Bacovia::Log'
+                    and $x == $y->{den}{value}) {
+                    if (ref($y->{num}) eq 'Math::Bacovia::Log') {
+                        push @alt, $y->{num}{value};
+                    }
+                    else {
+                        push @alt, 'Math::Bacovia::Exp'->new($y->{num})->alternatives;
+                    }
+                }
             }
         }
-    }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
+    };
+
+    @{$self->{_alt}};
 }
 
 1;

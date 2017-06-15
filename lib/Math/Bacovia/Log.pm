@@ -29,7 +29,8 @@ Class::Multimethods::multimethod sub => (__PACKAGE__, __PACKAGE__) => sub {
 };
 
 sub neg {
-    __PACKAGE__->new($_[0]->{value}->inv);
+    my ($x) = @_;
+    $x->{_neg} //= __PACKAGE__->new($x->{value}->inv);
 }
 
 #
@@ -49,33 +50,41 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 #
 
 sub numeric {
-    CORE::log($_[0]->{value}->numeric);
+    my ($x) = @_;
+    $x->{_num} //= CORE::log($x->{value}->numeric);
 }
 
 sub pretty {
-    "log(" . $_[0]->{value}->pretty() . ")";
+    my ($x) = @_;
+    $x->{_pretty} //= "log(" . $x->{value}->pretty() . ")";
 }
 
 sub stringify {
-    "Log(" . $_[0]->{value}->stringify() . ")";
+    my ($x) = @_;
+    $x->{_str} //= "Log(" . $x->{value}->stringify() . ")";
 }
 
 #
 ## Alternatives
 #
 sub alternatives {
-    my ($x, %opt) = @_;
+    my ($x) = @_;
 
-    my @alt;
-    foreach my $x ($x->{value}->alternatives(%opt)) {
-        push @alt, __PACKAGE__->new($x);
+    $x->{_alt} //= do {
 
-        if (ref($x) eq 'Math::Bacovia::Exp') {
-            push @alt, $x->{value};
+        my @alt;
+        foreach my $x ($x->{value}->alternatives) {
+            push @alt, __PACKAGE__->new($x);
+
+            if (ref($x) eq 'Math::Bacovia::Exp') {
+                push @alt, $x->{value};
+            }
         }
-    }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
+    };
+
+    @{$x->{_alt}};
 }
 
 1;
