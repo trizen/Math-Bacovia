@@ -62,39 +62,45 @@ sub numeric {
 }
 
 sub pretty {
-    "exp(" . $_[0]->{value}->pretty() . ")";
+    my ($x) = @_;
+    $x->{_pretty} //= "exp(" . $x->{value}->pretty() . ")";
 }
 
 sub stringify {
-    "Exp(" . $_[0]->{value}->stringify() . ")";
+    my ($x) = @_;
+    $x->{_str} //= "Exp(" . $x->{value}->stringify() . ")";
 }
 
 #
 ## Alternatives
 #
 sub alternatives {
-    my ($self, %opt) = @_;
+    my ($self) = @_;
 
-    my @a;
+    $self->{_alt} //= do {
 
-    foreach my $a ($self->{value}->alternatives(%opt)) {
-        push @a, __PACKAGE__->new($a);
+        my @a;
+        foreach my $a ($self->{value}->alternatives) {
+            push @a, __PACKAGE__->new($a);
 
-        if (ref($a) eq 'Math::Bacovia::Product' and @{$a->{values}} == 2) {
-            my ($x, $y) = @{$a->{values}};
-            if (ref($x) eq 'Math::Bacovia::Log') {
-                push @a, 'Math::Bacovia::Power'->new($x->{value}, $y);
+            if (ref($a) eq 'Math::Bacovia::Product' and @{$a->{values}} == 2) {
+                my ($x, $y) = @{$a->{values}};
+                if (ref($x) eq 'Math::Bacovia::Log') {
+                    push @a, 'Math::Bacovia::Power'->new($x->{value}, $y);
+                }
+                elsif (ref($y) eq 'Math::Bacovia::Log') {
+                    push @a, 'Math::Bacovia::Power'->new($y->{value}, $x);
+                }
             }
-            elsif (ref($y) eq 'Math::Bacovia::Log') {
-                push @a, 'Math::Bacovia::Power'->new($y->{value}, $x);
+            elsif (ref($a) eq 'Math::Bacovia::Log') {
+                push @a, $a->{value};
             }
         }
-        elsif (ref($a) eq 'Math::Bacovia::Log') {
-            push @a, $a->{value};
-        }
-    }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @a;
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @a];
+    };
+
+    @{$self->{_alt}};
 }
 
 1;

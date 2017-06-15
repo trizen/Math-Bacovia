@@ -25,6 +25,8 @@ use Math::Bacovia::Sum;
 use Math::Bacovia::Product;
 use Math::Bacovia::Symbol;
 
+=encoding utf8
+
 =head1 NAME
 
 Math::Bacovia - Symbolic math library.

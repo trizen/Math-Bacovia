@@ -55,9 +55,12 @@ sub pretty {
 
 sub stringify {
     my ($x) = @_;
-    defined($x->{value})
-      ? ("Symbol(\"\Q$x->{name}\E\", " . $x->{value}->stringify() . ")")
-      : ("Symbol(\"\Q$x->{name}\E\")");
+
+    $x->{_str} //= do {
+        defined($x->{value})
+          ? ("Symbol(\"\Q$x->{name}\E\", " . $x->{value}->stringify() . ")")
+          : ("Symbol(\"\Q$x->{name}\E\")");
+    };
 }
 
 1;

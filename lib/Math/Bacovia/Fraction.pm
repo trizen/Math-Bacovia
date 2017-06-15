@@ -160,19 +160,22 @@ sub numeric {
 sub pretty {
     my ($x) = @_;
 
-    my $num = $x->{num}->pretty();
-    my $den = $x->{den}->pretty();
+    $x->{_pretty} //= do {
+        my $num = $x->{num}->pretty();
+        my $den = $x->{den}->pretty();
 
-    if ($den eq '1') {
-        return $num;
-    }
-
-    "($num/$den)";
+        if ($den eq '1') {
+            $num;
+        }
+        else {
+            "($num/$den)";
+        }
+    };
 }
 
 sub stringify {
     my ($x) = @_;
-    "Fraction(" . $x->{num}->stringify() . ', ' . $x->{den}->stringify() . ")";
+    $x->{_str} //= "Fraction(" . $x->{num}->stringify() . ', ' . $x->{den}->stringify() . ")";
 }
 
 #
@@ -180,28 +183,33 @@ sub stringify {
 #
 
 sub alternatives {
-    my ($x, %opt) = @_;
+    my ($x) = @_;
 
-    my @a_num = $x->{num}->alternatives(%opt);
-    my @a_den = $x->{den}->alternatives(%opt);
+    $x->{_alt} //= do {
+        my @a_num = $x->{num}->alternatives;
+        my @a_den = $x->{den}->alternatives;
 
-    my @alt;
-    foreach my $num (@a_num) {
-        foreach my $den (@a_den) {
+        my @alt;
+        foreach my $num (@a_num) {
+            foreach my $den (@a_den) {
 
-            if ($den == $Math::Bacovia::ONE) {
-                push @alt, $num;
-            }
-            elsif ($num == $Math::Bacovia::ONE) {
-                push @alt, $den->inv;
-            }
-            else {
-                push @alt, __PACKAGE__->new($num, $den);
+                if ($den == $Math::Bacovia::ONE) {
+                    push @alt, $num;
+                }
+                elsif ($num == $Math::Bacovia::ONE) {
+                    push @alt, $den->inv;
+                }
+                else {
+                    push @alt, __PACKAGE__->new($num, $den);
+                    ##push @alt, $num / $den;    # better, but slower...
+                }
             }
         }
-    }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
+    };
+
+    @{$x->{_alt}};
 }
 
 1;

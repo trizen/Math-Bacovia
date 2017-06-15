@@ -118,20 +118,23 @@ sub numeric {
 
 sub pretty {
     my ($x) = @_;
-    my $str = "$x->{value}";
 
-    if ((index($str, 'i') != -1 and $str ne 'i' and $str ne '-i')
-        or index($str, '/') != -1) {
-        "($str)";
-    }
-    else {
-        $str;
-    }
+    $x->{_pretty} //= do {
+        my $str = "$x->{value}";
+
+        if ((index($str, 'i') != -1 and $str ne 'i' and $str ne '-i')
+            or index($str, '/') != -1) {
+            "($str)";
+        }
+        else {
+            $str;
+        }
+    };
 }
 
 sub stringify {
     my ($x) = @_;
-    $x->{value}->stringify;
+    $x->{_str} //= $x->{value}->stringify;
 }
 
 #

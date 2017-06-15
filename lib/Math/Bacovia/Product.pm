@@ -66,13 +66,15 @@ sub numeric {
 
 sub pretty {
     my ($x) = @_;
-    my @pretty = map { $_->pretty } @{$x->{values}};
-    @pretty ? ('(' . join(' * ', @pretty) . ')') : '1';
+    $x->{_pretty} //= do {
+        my @pretty = map { $_->pretty } @{$x->{values}};
+        @pretty ? ('(' . join(' * ', @pretty) . ')') : '1';
+    };
 }
 
 sub stringify {
     my ($x) = @_;
-    'Product(' . join(', ', map { $_->stringify } @{$x->{values}}) . ')';
+    $x->{_str} //= 'Product(' . join(', ', map { $_->stringify } @{$x->{values}}) . ')';
 }
 
 #
@@ -102,41 +104,44 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 ## Alternatives
 #
 sub alternatives {
-    my ($x, %opt) = @_;
+    my ($x) = @_;
 
-    $opt{fast} && return ($x);
+    $x->{_alt} //= do {
 
-    my @alt;
+        my @alt;
 
-    Math::Bacovia::Utils::cartesian {
-        my %table;
-        foreach my $v (@_) {
-            push @{$table{ref($v)}}, $v;
-        }
-
-        my @partial;
-        foreach my $group (values(%table)) {
-            my $prod = shift(@$group);
-            foreach my $v (@{$group}) {
-                $prod *= $v;
-            }
-            push @partial, $prod;
-        }
-
-        if (@partial) {
-            @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
-
-            my $prod = shift(@partial);
-            foreach my $v (@partial) {
-                $prod *= $v;
+        Math::Bacovia::Utils::cartesian {
+            my %table;
+            foreach my $v (@_) {
+                push @{$table{ref($v)}}, $v;
             }
 
-            push @alt, $prod;
-        }
-    }
-    map { [$_->alternatives(%opt)] } @{$x->{values}};
+            my @partial;
+            foreach my $group (values(%table)) {
+                my $prod = shift(@$group);
+                foreach my $v (@{$group}) {
+                    $prod *= $v;
+                }
+                push @partial, $prod;
+            }
 
-    List::UtilsBy::XS::uniq_by { $_->stringify } @alt;
+            if (@partial) {
+                @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
+
+                my $prod = shift(@partial);
+                foreach my $v (@partial) {
+                    $prod *= $v;
+                }
+
+                push @alt, $prod;
+            }
+        }
+        map { [$_->alternatives] } @{$x->{values}};
+
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
+    };
+
+    @{$x->{_alt}};
 }
 
 1;
