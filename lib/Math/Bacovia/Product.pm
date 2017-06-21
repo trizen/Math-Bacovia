@@ -113,9 +113,16 @@ sub alternatives {
         my @alt;
 
         Math::Bacovia::Utils::cartesian {
+            my (@c) = @_;
+
             my %table;
-            foreach my $v (@_) {
-                push @{$table{ref($v)}}, $v;
+            foreach my $v (@c) {
+                if (ref($v) eq __PACKAGE__) {
+                    push @c, @{$v->{values}};
+                }
+                else {
+                    push @{$table{ref($v)}}, $v;
+                }
             }
 
             my @partial;
@@ -124,13 +131,19 @@ sub alternatives {
                 foreach my $v (@{$group}) {
                     $prod *= $v;
                 }
-                push @partial, $prod;
+
+                if (ref($prod) eq __PACKAGE__) {
+                    push @partial, @{$prod->{values}};
+                }
+                else {
+                    push @partial, $prod;
+                }
             }
 
             if (@partial) {
-                @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
+                @partial = grep { $_ != $Math::Bacovia::ONE } List::UtilsBy::XS::sort_by { ref($_) } @partial;
 
-                my $prod = shift(@partial);
+                my $prod = shift(@partial) // $Math::Bacovia::ONE;
                 foreach my $v (@partial) {
                     $prod *= $v;
                 }

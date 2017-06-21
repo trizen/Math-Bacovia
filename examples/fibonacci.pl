@@ -27,10 +27,10 @@ foreach my $n (0 .. 9) {
 
 my $simple = fibonacci(Symbol('n', 12))->simple;
 
-$simple->numeric eq '144'
+$simple->numeric->round(-30) eq '144'
   or die "Error in simplification!";
 
 my $f = $simple->simple->pretty;
-is($f, '((((1 + 5^(1/2))/2)^n - (((exp((-i * (log(-1) * -i * n))) + exp((i * (log(-1) * -i * n))))/2) * (2/(1 + 5^(1/2)))^n))/5^(1/2))');
+is($f, '((((1 + 5^(1/2))/2)^n - (((exp((log(-1) * -1 * n)) + (-1)^n)/2) * (2/(1 + 5^(1/2)))^n))/5^(1/2))');
 
 say $f;

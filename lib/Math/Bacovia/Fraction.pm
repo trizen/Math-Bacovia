@@ -197,6 +197,10 @@ sub alternatives {
                     push @alt, $num;
                 }
 
+                if ($num == $den) {
+                    push @alt, $Math::Bacovia::ONE;
+                }
+
                 push @alt, __PACKAGE__->new($num, $den);
                 ##push @alt, $num / $den;    # better, but slower...
 

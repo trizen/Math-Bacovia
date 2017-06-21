@@ -117,9 +117,16 @@ sub alternatives {
         my @alt;
 
         Math::Bacovia::Utils::cartesian {
+            my (@c) = @_;
+
             my %table;
-            foreach my $v (@_) {
-                push @{$table{ref($v)}}, $v;
+            foreach my $v (@c) {
+                if (ref($v) eq __PACKAGE__) {
+                    push @c, @{$v->{values}};
+                }
+                else {
+                    push @{$table{ref($v)}}, $v;
+                }
             }
 
             my @partial;
@@ -128,13 +135,18 @@ sub alternatives {
                 foreach my $v (@{$group}) {
                     $sum += $v;
                 }
-                push @partial, $sum;
+                if (ref($sum) eq __PACKAGE__) {
+                    push @partial, @{$sum->{values}};
+                }
+                else {
+                    push @partial, $sum;
+                }
             }
 
             if (@partial) {
-                @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
+                @partial = grep { $_ != $Math::Bacovia::ZERO } List::UtilsBy::XS::sort_by { ref($_) } @partial;
 
-                my $sum = shift(@partial);
+                my $sum = shift(@partial) // $Math::Bacovia::ZERO;
                 foreach my $v (@partial) {
                     $sum += $v;
                 }
