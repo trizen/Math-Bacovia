@@ -9,7 +9,22 @@ use parent qw(Math::Bacovia);
 sub new {
     my ($class, @values) = @_;
     Math::Bacovia::Utils::check_type(\$_) for @values;
-    bless {values => \@values}, $class;
+
+    my @flat;
+    foreach my $value (@values) {
+        if (ref($value) eq __PACKAGE__) {
+            push @values, @{$value->{values}};
+        }
+        elsif ($value != $Math::Bacovia::ONE) {
+            push @flat, $value;
+        }
+    }
+
+    @flat || do {
+        @flat = ($Math::Bacovia::ONE);
+    };
+
+    bless {values => \@flat}, $class;
 }
 
 sub inside {
@@ -127,6 +142,7 @@ sub alternatives {
 
             my @partial;
             foreach my $group (values(%table)) {
+
                 my $prod = shift(@$group);
                 foreach my $v (@{$group}) {
                     $prod *= $v;
@@ -140,16 +156,19 @@ sub alternatives {
                 }
             }
 
-            if (@partial) {
-                @partial = grep { $_ != $Math::Bacovia::ONE } List::UtilsBy::XS::sort_by { ref($_) } @partial;
+#<<<
+            @partial = (
+                List::UtilsBy::XS::nsort_by { $Math::Bacovia::HIERARCHY{ref($_)} }
+                grep { $_ != $Math::Bacovia::ONE } @partial
+            );
+#>>>
 
-                my $prod = shift(@partial) // $Math::Bacovia::ONE;
-                foreach my $v (@partial) {
-                    $prod *= $v;
-                }
-
-                push @alt, $prod;
+            my $prod = shift(@partial) // $Math::Bacovia::ONE;
+            foreach my $v (@partial) {
+                $prod *= $v;
             }
+
+            push @alt, $prod;
         }
         map { [$_->alternatives] } @{$x->{values}};
 

@@ -31,6 +31,6 @@ $simple->numeric->round(-30) eq '144'
   or die "Error in simplification!";
 
 my $f = $simple->simple->pretty;
-is($f, '((((1 + 5^(1/2))/2)^n - (((exp((log(-1) * -1 * n)) + (-1)^n)/2) * (2/(1 + 5^(1/2)))^n))/5^(1/2))');
+is($f, '((((1 + 5^(1/2))/2)^n - ((((-1)^n + exp((-1 * log(-1) * n)))/2) * (2/(1 + 5^(1/2)))^n))/5^(1/2))');
 
 say $f;

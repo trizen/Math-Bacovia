@@ -43,3 +43,9 @@ say +(Product(3, 4)->neg * 12)->pretty;
     say $f->simple->pretty;
     say $f->numeric;
 }
+
+say 42 * Product(3, 4);
+
+say $_ for Product()->alternatives;
+say $_ for Product(1)->alternatives;
+say $_ for Product(4, Symbol('n'), 2)->alternatives;
