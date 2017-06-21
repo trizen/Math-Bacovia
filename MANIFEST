@@ -12,6 +12,7 @@ examples/generalized_fibonacci.pl
 examples/summation.pl
 examples/test.pl
 examples/trigonometry.pl
+examples/various_tests.pl
 examples/zeta_2n.pl
 ignore.txt
 lib/Math/Bacovia.pm
