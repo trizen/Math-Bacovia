@@ -15,12 +15,20 @@ sub fibonacci ($t, $n) {
     Fraction(Power($b, $t) - Power(-$b, -$t), $a);
 }
 
-say my $x = fibonacci(Symbol('n', 12), 1)->simple->pretty;
-say my $y = fibonacci(Symbol('n', 12), Symbol('m'))->simple->pretty;
+my $x = fibonacci(Symbol('n', 12), 1)->simple->simple;
+my $y = fibonacci(Symbol('n', 12), Symbol('m', 1))->simple->simple;
 
-plan tests => 2;
+say $x->pretty;
+say $y->pretty;
+
+plan tests => 4;
 
 #<<<
-is($x, '((((5^(1/2) + (5^1 - 4)^(1/2))/2)^n - (-((5^(1/2) + (5^1 - 4)^(1/2))/2))^(-n))/5^(1/2))');
-is($y, '(((((4 + m^2)^(1/2) + ((4 + m^2)^1 - 4)^(1/2))/2)^n - (-(((4 + m^2)^(1/2) + ((4 + m^2)^1 - 4)^(1/2))/2))^(-n))/(4 + m^2)^(1/2))');
+is($x->pretty, '((((5^(1/2) + (5 - 4)^(1/2))/2)^n - (-((5^(1/2) + (5 - 4)^(1/2))/2))^(-n))/5^(1/2))');
+is($y->pretty, '(((((4 + m^2)^(1/2) + ((4 + m^2) - 4)^(1/2))/2)^n - (-(((4 + m^2)^(1/2) + ((4 + m^2) - 4)^(1/2))/2))^(-n))/(4 + m^2)^(1/2))');
+#>>>
+
+#<<<
+is($x->numeric, 144);
+is($y->numeric, 144);
 #>>>

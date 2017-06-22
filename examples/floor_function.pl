@@ -6,7 +6,7 @@ use utf8;
 use 5.014;
 
 use Test::More;
-plan tests => 14;
+plan tests => 15;
 
 use lib qw(../lib);
 use Math::Bacovia qw(:all);
@@ -35,4 +35,7 @@ is(my_floor(-129.999)->simple->numeric->round(-50), -130);
 is(my_floor(Symbol('x', 43.999))->simple->numeric->round(-50),  43);
 is(my_floor(Symbol('x', -123.12))->simple->numeric->round(-50), -124);
 
-say "** Test passed!"
+my $f = my_floor(Symbol('x'))->simple->simple;
+is($f->pretty, '((x - 0.5) + ((-0.5/log(-1)) * log(((1 - exp((2 * log(-1) * x)))/((exp((2 * log(-1) * x)) - 1) * exp((-2 * log(-1) * x)))))))');
+
+say "floor(x) = ", $f->pretty;
