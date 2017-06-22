@@ -14,6 +14,18 @@ use constant {
               ONE  => 'Math::AnyNum'->one,
              };
 
+our %HIERARCHY = (
+                  'Math::Bacovia::Number'     => 0,
+                  'Math::Bacovia::Difference' => 1,
+                  'Math::Bacovia::Fraction'   => 2,
+                  'Math::Bacovia::Power'      => 3,
+                  'Math::Bacovia::Log'        => 4,
+                  'Math::Bacovia::Exp'        => 5,
+                  'Math::Bacovia::Sum'        => 6,
+                  'Math::Bacovia::Product'    => 7,
+                  'Math::Bacovia::Symbol'     => 8,
+                 );
+
 use Math::Bacovia::Utils;
 use Math::Bacovia::Exp;
 use Math::Bacovia::Log;
