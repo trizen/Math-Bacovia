@@ -43,6 +43,28 @@ sub inv {
     $x->{_inv} //= __PACKAGE__->new($x->{base}, $x->{power}->neg);
 }
 
+Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+
+    if ($x->{base} == $y->{base}) {
+        __PACKAGE__->new($x->{base}, $x->{power} + $y->{power});
+    }
+    else {
+        'Math::Bacovia::Product'->new($x, $y);
+    }
+};
+
+Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
+    my ($x, $y) = @_;
+
+    if ($x->{base} == $y->{base}) {
+        __PACKAGE__->new($x->{base}, $x->{power} - $y->{power});
+    }
+    else {
+        'Math::Bacovia::Fraction'->new($x, $y);
+    }
+};
+
 #
 ## Equality
 #

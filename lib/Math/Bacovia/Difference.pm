@@ -184,6 +184,9 @@ sub alternatives {
                 elsif ($minuend == $Math::Bacovia::ZERO) {
                     push @alt, $subtrahend->neg;
                 }
+                elsif ($minuend == $subtrahend) {
+                    push @alt, $Math::Bacovia::ZERO;
+                }
                 else {
                     push @alt, __PACKAGE__->new($minuend, $subtrahend);
                     ##push @alt, $minuend - $subtrahend;    # better, but slower...

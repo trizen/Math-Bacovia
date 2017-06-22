@@ -9,7 +9,22 @@ use parent qw(Math::Bacovia);
 sub new {
     my ($class, @values) = @_;
     Math::Bacovia::Utils::check_type(\$_) for @values;
-    bless {values => \@values}, $class;
+
+    my @flat;
+    foreach my $value (@values) {
+        if (ref($value) eq __PACKAGE__) {
+            push @values, @{$value->{values}};
+        }
+        elsif ($value != $Math::Bacovia::ZERO) {
+            push @flat, $value;
+        }
+    }
+
+    @flat || do {
+        @flat = ($Math::Bacovia::ZERO);
+    };
+
+    bless {values => \@flat}, $class;
 }
 
 sub inside {
@@ -117,9 +132,16 @@ sub alternatives {
         my @alt;
 
         Math::Bacovia::Utils::cartesian {
+            my (@c) = @_;
+
             my %table;
-            foreach my $v (@_) {
-                push @{$table{ref($v)}}, $v;
+            foreach my $v (@c) {
+                if (ref($v) eq __PACKAGE__) {
+                    push @c, @{$v->{values}};
+                }
+                else {
+                    push @{$table{ref($v)}}, $v;
+                }
             }
 
             my @partial;
@@ -128,19 +150,27 @@ sub alternatives {
                 foreach my $v (@{$group}) {
                     $sum += $v;
                 }
-                push @partial, $sum;
-            }
-
-            if (@partial) {
-                @partial = List::UtilsBy::XS::sort_by { ref($_) } @partial;
-
-                my $sum = shift(@partial);
-                foreach my $v (@partial) {
-                    $sum += $v;
+                if (ref($sum) eq __PACKAGE__) {
+                    push @partial, @{$sum->{values}};
                 }
-
-                push @alt, $sum;
+                else {
+                    push @partial, $sum;
+                }
             }
+
+#<<<
+            @partial = (
+                List::UtilsBy::XS::nsort_by { $Math::Bacovia::HIERARCHY{ref($_)} }
+                grep { $_ != $Math::Bacovia::ZERO } @partial
+            );
+#>>>
+
+            my $sum = shift(@partial) // $Math::Bacovia::ZERO;
+            foreach my $v (@partial) {
+                $sum += $v;
+            }
+
+            push @alt, $sum;
         }
         map { [$_->alternatives] } @{$x->{values}};
 
