@@ -6,7 +6,7 @@ use Math::Bacovia qw(:all);
 
 use Test::More;
 
-plan tests => 4;
+plan tests => 14;
 
 my $n = Symbol('n');
 
