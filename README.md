@@ -8,14 +8,7 @@ Math::Bacovia is a symbolic math library, with support for numerical evaluation 
 use utf8;
 use 5.014;
 
-use Math::Bacovia qw(
-    Log
-    Exp
-    Power
-    Symbol
-    Product
-    Fraction
-);
+use Math::Bacovia qw(:all);
 
 my $x = Symbol('x');
 my $y = Symbol('y');
@@ -51,7 +44,7 @@ for my $n (1..3) {
     $prod *= Exp(Fraction(1, $n));
 }
 
-say $prod;                    #=> Product(Fraction(1, 1), Exp(Fraction(1, 1)), Exp(Fraction(1, 2)), Exp(Fraction(1, 3)))
+say $prod->pretty;            #=> (exp(1) * exp(1/2) * exp(1/3))
 say $prod->simple->pretty;    #=> exp(11/6)
 say $prod->numeric;           #=> 6.25470095193632871640207...
 
@@ -120,12 +113,6 @@ Power(3, 2)
 9
 ```
 
-The `alternatives()` method accepts the following options:
-
-```perl
-    fast => 1       # will return fewer alternatives
-```
-
 #### # `simple()`
 
 Returns a simplification of the self-expression.
@@ -138,12 +125,6 @@ Output:
 
 ```perl
 Symbol("x")
-```
-
-The `simple()` method accepts the following options:
-
-```perl
-    fast => 1       # will return faster
 ```
 
 #### # `pretty()`
@@ -161,7 +142,7 @@ Output:
 
 #### # `numeric()`
 
-Evaluates the self-expression numerically and returns the result as a Number or a Complex object.
+Evaluates the self-expression numerically and returns the result as a Number object.
 
 ```perl
 my $x = Symbol('x');
