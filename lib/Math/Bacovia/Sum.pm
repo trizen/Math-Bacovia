@@ -166,6 +166,7 @@ sub alternatives {
 #>>>
 
             my $sum = shift(@partial) // $Math::Bacovia::ZERO;
+
             foreach my $v (@partial) {
                 $sum += $v;
             }
