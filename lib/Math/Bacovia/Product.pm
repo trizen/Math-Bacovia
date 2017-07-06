@@ -156,6 +156,13 @@ sub alternatives {
                 }
             }
 
+            foreach my $v (@partial) {
+                if ($v == $Math::Bacovia::ZERO) {
+                    push @alt, $Math::Bacovia::ZERO;
+                    return;
+                }
+            }
+
 #<<<
             @partial = (
                 List::UtilsBy::XS::nsort_by { $Math::Bacovia::HIERARCHY{ref($_)} }
@@ -164,6 +171,7 @@ sub alternatives {
 #>>>
 
             my $prod = shift(@partial) // $Math::Bacovia::ONE;
+
             foreach my $v (@partial) {
                 $prod *= $v;
             }
