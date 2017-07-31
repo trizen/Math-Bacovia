@@ -76,12 +76,12 @@ sub stringify {
 ## Alternatives
 #
 sub alternatives {
-    my ($self) = @_;
+    my ($self, %opt) = @_;
 
     $self->{_alt} //= do {
 
         my @a;
-        foreach my $a ($self->{value}->alternatives) {
+        foreach my $a ($self->{value}->alternatives(%opt)) {
             push @a, __PACKAGE__->new($a);
 
             if (ref($a) eq 'Math::Bacovia::Product' and @{$a->{values}} == 2) {

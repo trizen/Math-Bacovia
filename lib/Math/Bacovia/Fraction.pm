@@ -183,11 +183,11 @@ sub stringify {
 #
 
 sub alternatives {
-    my ($x) = @_;
+    my ($x, %opt) = @_;
 
     $x->{_alt} //= do {
-        my @a_num = $x->{num}->alternatives;
-        my @a_den = $x->{den}->alternatives;
+        my @a_num = $x->{num}->alternatives(%opt);
+        my @a_den = $x->{den}->alternatives(%opt);
 
         my @alt;
         foreach my $num (@a_num) {
@@ -202,10 +202,12 @@ sub alternatives {
                 }
 
                 push @alt, __PACKAGE__->new($num, $den);
-                ##push @alt, $num / $den;    # better, but slower...
 
-                if (    ref($num) eq 'Math::Bacovia::Number'
-                    and ref($den) eq 'Math::Bacovia::Number') {
+                if ($opt{full}) {
+                    push @alt, $num / $den;
+                }
+                elsif (    ref($num) eq 'Math::Bacovia::Number'
+                       and ref($den) eq 'Math::Bacovia::Number') {
                     push @alt, $num / $den;
                 }
             }

@@ -48,4 +48,4 @@ say $prod->simple->pretty;    #=> exp(11/6)
 say $prod->numeric;           #=> 6.25470095193632871640207...
 
 say "\n=> Alternative representations:";
-say join ', ', Power(3, 5)->alternatives;    #=> Exp(Product(Log(3), 5)), Power(3, 5)
+say join ', ', Power(3, 5)->alternatives(full => 1);    #=> Power(3, 5), Exp(Product(Log(3), 5))

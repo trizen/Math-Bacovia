@@ -168,11 +168,11 @@ sub stringify {
 #
 
 sub alternatives {
-    my ($x) = @_;
+    my ($x, %opt) = @_;
 
     $x->{_alt} //= do {
-        my @a_num = $x->{minuend}->alternatives;
-        my @a_den = $x->{subtrahend}->alternatives;
+        my @a_num = $x->{minuend}->alternatives(%opt);
+        my @a_den = $x->{subtrahend}->alternatives(%opt);
 
         my @alt;
         foreach my $minuend (@a_num) {
@@ -188,8 +188,15 @@ sub alternatives {
                     push @alt, $Math::Bacovia::ZERO;
                 }
                 else {
-                    push @alt, __PACKAGE__->new($minuend, $subtrahend);
-                    ##push @alt, $minuend - $subtrahend;    # better, but slower...
+                    push(@alt, __PACKAGE__->new($minuend, $subtrahend));
+
+                    if ($opt{full}) {
+                        push @alt, $minuend - $subtrahend;
+                    }
+                    elsif (    ref($minuend) eq 'Math::Bacovia::Number'
+                           and ref($subtrahend) eq 'Math::Bacovia::Number') {
+                        push @alt, $minuend - $subtrahend;
+                    }
                 }
             }
         }

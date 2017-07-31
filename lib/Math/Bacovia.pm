@@ -556,8 +556,8 @@ sub acsch {
 #
 
 sub simple {
-    my ($x) = @_;
-    $x->{_simple} //= ((List::UtilsBy::XS::min_by { length($_->pretty) } ($x->alternatives))[0]);
+    my ($x, %opt) = @_;
+    $x->{_simple} //= ((List::UtilsBy::XS::min_by { length($_->pretty) } ($x->alternatives(%opt)))[0]);
 }
 
 sub alternatives {

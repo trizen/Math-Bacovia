@@ -114,11 +114,11 @@ sub stringify {
 ## Alternatives
 #
 sub alternatives {
-    my ($self) = @_;
+    my ($self, %opt) = @_;
 
     $self->{_alt} //= do {
-        my @a1 = $self->{base}->alternatives;
-        my @a2 = $self->{power}->alternatives;
+        my @a1 = $self->{base}->alternatives(%opt);
+        my @a2 = $self->{power}->alternatives(%opt);
 
         my @alt;
 
@@ -127,7 +127,10 @@ sub alternatives {
 
                 push @alt, $x**$y;
                 push @alt, __PACKAGE__->new($x, $y);
-                ##push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
+
+                if ($opt{full} or $opt{log}) {
+                    push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
+                }
 
                 # Identity: x^0 = 1
                 if ($y == $Math::Bacovia::ZERO) {
@@ -146,8 +149,12 @@ sub alternatives {
 
                 # Identity: (a/b)^x = a^x / b^x
                 if (ref($x) eq 'Math::Bacovia::Fraction') {
-                    push @alt, $x->{num}**$y / $x->{den}**$y;
-                    ##push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives;    # better, but slower...
+                    if ($opt{full}) {
+                        push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives(%opt);
+                    }
+                    else {
+                        push @alt, $x->{num}**$y / $x->{den}**$y;
+                    }
                 }
 
                 # Identity: x^2 = x*x
@@ -179,7 +186,7 @@ sub alternatives {
                         push @alt, $y->{num}{value};
                     }
                     else {
-                        push @alt, 'Math::Bacovia::Exp'->new($y->{num})->alternatives;
+                        push @alt, 'Math::Bacovia::Exp'->new($y->{num})->alternatives(%opt);
                     }
                 }
             }

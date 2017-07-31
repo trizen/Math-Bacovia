@@ -84,8 +84,8 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Fraction')
 };
 
 #~ Class::Multimethods::multimethod pow => (__PACKAGE__, __PACKAGE__) => sub {
-    #~ my ($x, $y) = @_;
-    #~ __PACKAGE__->new($x->{value}**$y->{value});
+#~ my ($x, $y) = @_;
+#~ __PACKAGE__->new($x->{value}**$y->{value});
 #~ };
 
 sub inv {
@@ -137,13 +137,6 @@ sub pretty {
 sub stringify {
     my ($x) = @_;
     $x->{_str} //= $x->{value}->stringify;
-}
-
-#
-## Alternatives
-#
-sub alternatives {
-    ($_[0]);
 }
 
 1;
