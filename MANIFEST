@@ -4,6 +4,7 @@ examples/basic.pl
 examples/binomial_theorem.pl
 examples/difference.pl
 examples/faulhaber_s_formula.pl
+examples/faulhaber_s_formula_2.pl
 examples/fibonacci.pl
 examples/fibonacci_2.pl
 examples/floor_function.pl
@@ -15,7 +16,6 @@ examples/test.pl
 examples/trigonometry.pl
 examples/various_tests.pl
 examples/zeta_2n.pl
-ignore.txt
 lib/Math/Bacovia.pm
 lib/Math/Bacovia/Difference.pm
 lib/Math/Bacovia/Exp.pm
