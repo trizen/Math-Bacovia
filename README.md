@@ -50,7 +50,7 @@ say $prod->numeric;           #=> 6.25470095193632871640207...
 
 
 say "\n=> Alternative representations:";
-say join ', ', Power(3, 5)->alternatives;   #=> Exp(Product(Log(3), 5)), Power(3, 5)
+say join ', ', Power(3, 5)->alternatives(full => 1);   #=> Power(3, 5), Exp(Product(Log(3), 5))
 ```
 
 
@@ -113,6 +113,22 @@ Power(3, 2)
 9
 ```
 
+This method also accepts currently two options:
+
+```perl
+    log  => 1,    # will try to generate logarithmic alternatives
+    full => 1,    # will try to generate more alternatives (may be slow)
+```
+
+The options can be provided as:
+
+```perl
+$obj->alternatives(
+    full => 1,
+    log  => 1,
+)
+```
+
 #### # `simple()`
 
 Returns a simplification of the self-expression.
@@ -125,6 +141,15 @@ Output:
 
 ```perl
 Symbol("x")
+```
+
+The options that can be passed to the `alternatives()` method, can also be passed to this method, as:
+
+```perl
+$obj->simple(
+    full => 1,
+    log  => 1,
+);
 ```
 
 #### # `pretty()`
