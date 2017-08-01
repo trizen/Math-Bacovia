@@ -5,7 +5,8 @@
 #    1^p + 2^p + 3^p + ... + n^p
 # where p is a positive integer.
 
-# See also: https://en.wikipedia.org/wiki/Faulhaber%27s_formula
+# See also:
+#   https://en.wikipedia.org/wiki/Faulhaber%27s_formula
 
 use 5.010;
 use strict;
@@ -22,7 +23,7 @@ sub faulhaber_s_formula {
 
     my $sum = Sum();
     for my $j (0 .. $p) {
-        $sum += Number(binomial($p + 1, $j)) * Number(bernfrac($j)) * ($n + 1)**($p + 1 - $j);
+        $sum += Number(binomial($p + 1, $j)) * Number(bernfrac($j)) * $n**($p + 1 - $j);
     }
 
     Fraction($sum, ($p + 1));
@@ -43,10 +44,10 @@ sub bernoulli_polynomials {
 
 sub faulhaber_s_formula_2 {
     my ($p, $n) = @_;
-    1 + Fraction( (bernoulli_polynomials($p + 1, $n + 1) - bernoulli_polynomials($p + 1, 1)),  ($p + 1));
+    1 + Fraction((bernoulli_polynomials($p + 1, $n) - bernoulli_polynomials($p + 1, 1)), ($p + 1));
 }
 
-foreach my $i (0 .. 5) {
+foreach my $i (0 .. 10) {
     say "F($i) = ", faulhaber_s_formula($i, Symbol('n'))->simple->pretty;
     say "F($i) = ", faulhaber_s_formula_2($i, Symbol('n'))->simple->pretty;
 }
