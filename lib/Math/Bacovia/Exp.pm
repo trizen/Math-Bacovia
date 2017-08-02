@@ -80,25 +80,26 @@ sub alternatives {
 
     $self->{_alt} //= do {
 
-        my @a;
-        foreach my $a ($self->{value}->alternatives(%opt)) {
-            push @a, __PACKAGE__->new($a);
+        my @alt;
+        foreach my $o ($self->{value}->alternatives(%opt)) {
 
-            if (ref($a) eq 'Math::Bacovia::Product' and @{$a->{values}} == 2) {
-                my ($x, $y) = @{$a->{values}};
+            push @alt, __PACKAGE__->new($o);
+
+            if (ref($o) eq 'Math::Bacovia::Product' and @{$o->{values}} == 2) {
+                my ($x, $y) = @{$o->{values}};
                 if (ref($x) eq 'Math::Bacovia::Log') {
-                    push @a, 'Math::Bacovia::Power'->new($x->{value}, $y);
+                    push @alt, 'Math::Bacovia::Power'->new($x->{value}, $y);
                 }
                 elsif (ref($y) eq 'Math::Bacovia::Log') {
-                    push @a, 'Math::Bacovia::Power'->new($y->{value}, $x);
+                    push @alt, 'Math::Bacovia::Power'->new($y->{value}, $x);
                 }
             }
-            elsif (ref($a) eq 'Math::Bacovia::Log') {
-                push @a, $a->{value};
+            elsif (ref($o) eq 'Math::Bacovia::Log') {
+                push @alt, $o->{value};
             }
         }
 
-        [List::UtilsBy::XS::uniq_by { $_->stringify } @a];
+        [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
     };
 
     @{$self->{_alt}};

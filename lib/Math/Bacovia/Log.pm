@@ -68,23 +68,24 @@ sub stringify {
 ## Alternatives
 #
 sub alternatives {
-    my ($x, %opt) = @_;
+    my ($self, %opt) = @_;
 
-    $x->{_alt} //= do {
+    $self->{_alt} //= do {
 
         my @alt;
-        foreach my $x ($x->{value}->alternatives(%opt)) {
-            push @alt, __PACKAGE__->new($x);
+        foreach my $o ($self->{value}->alternatives(%opt)) {
 
-            if (ref($x) eq 'Math::Bacovia::Exp') {
-                push @alt, $x->{value};
+            push @alt, __PACKAGE__->new($o);
+
+            if (ref($o) eq 'Math::Bacovia::Exp') {
+                push @alt, $o->{value};
             }
         }
 
         [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
     };
 
-    @{$x->{_alt}};
+    @{$self->{_alt}};
 }
 
 1;

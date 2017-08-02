@@ -188,7 +188,8 @@ sub alternatives {
                     push @alt, $Math::Bacovia::ZERO;
                 }
                 else {
-                    push(@alt, __PACKAGE__->new($minuend, $subtrahend));
+
+                    push @alt, __PACKAGE__->new($minuend, $subtrahend);
 
                     if ($opt{full}) {
                         push @alt, $minuend - $subtrahend;
