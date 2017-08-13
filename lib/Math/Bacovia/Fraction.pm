@@ -203,7 +203,14 @@ sub alternatives {
 
                 push @alt, __PACKAGE__->new($num, $den);
 
+                # Identity: 1/x = inv(x)
+                if ($num == $Math::Bacovia::ONE) {
+                    push @alt, $den->inv;
+                }
+
                 if ($opt{full}) {
+                    push @alt, $den->inv * $num;
+                    push @alt, $num * $den->inv;
                     push @alt, $num / $den;
                 }
                 elsif (    ref($num) eq 'Math::Bacovia::Number'

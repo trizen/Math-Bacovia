@@ -126,7 +126,10 @@ sub alternatives {
             foreach my $y (@a2) {
 
                 push @alt, $x**$y;
-                push @alt, __PACKAGE__->new($x, $y);
+
+                if ($opt{full}) {
+                    push @alt, __PACKAGE__->new($x, $y);
+                }
 
                 if ($opt{full} or $opt{log}) {
                     push @alt, 'Math::Bacovia::Exp'->new('Math::Bacovia::Log'->new($x) * $y);
