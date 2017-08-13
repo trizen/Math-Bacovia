@@ -126,7 +126,7 @@ The options can be provided as:
 $obj->alternatives(
     full => 1,
     log  => 1,
-)
+);
 ```
 
 #### # `simple()`
@@ -143,14 +143,22 @@ Output:
 Symbol("x")
 ```
 
-The options that can be passed to the `alternatives()` method, can also be passed to this method, as:
+Accepts the same options as the `alternatives()` method.
+
+#### # `expand()`
+
+Returns an expanded version of the self-expression.
 
 ```perl
-$obj->simple(
-    full => 1,
-    log  => 1,
-);
+say Log(Symbol('x') * Symbol('y'))->expand(full => 1);
 ```
+
+Output:
+```perl
+Sum(Log(Symbol("x")), Log(Symbol("y")))
+```
+
+Accepts the same options as the `alternatives()` method.
 
 #### # `pretty()`
 

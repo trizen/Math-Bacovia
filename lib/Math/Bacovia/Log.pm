@@ -80,6 +80,16 @@ sub alternatives {
             if (ref($o) eq 'Math::Bacovia::Exp') {
                 push @alt, $o->{value};
             }
+
+            if ($opt{full}) {
+                if (ref($o) eq 'Math::Bacovia::Product') {
+                    push @alt, 'Math::Bacovia::Sum'->new(map { __PACKAGE__->new($_) } @{$o->{values}});
+                }
+
+                if (ref($o) eq 'Math::Bacovia::Fraction') {
+                    push @alt, 'Math::Bacovia::Difference'->new(__PACKAGE__->new($o->{num}), __PACKAGE__->new($o->{den}));
+                }
+            }
         }
 
         [List::UtilsBy::XS::uniq_by { $_->stringify } @alt];
