@@ -35,7 +35,7 @@ is(my_floor(-129.999)->simple->numeric->round(-50), -130);
 is(my_floor(Symbol('x', 43.999))->simple->numeric->round(-50),  43);
 is(my_floor(Symbol('x', -123.12))->simple->numeric->round(-50), -124);
 
-my $f = my_floor(Symbol('x'))->simple->simple;
+my $f = my_floor(Symbol('x'))->simple->simple(full => 1);
 is($f->pretty, '((x - 0.5) + ((-0.5/log(-1)) * log(((1 - exp((2 * log(-1) * x)))/((exp((2 * log(-1) * x)) - 1) * exp((-2 * log(-1) * x)))))))');
 
 say "floor(x) = ", $f->pretty;
