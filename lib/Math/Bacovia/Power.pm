@@ -154,12 +154,7 @@ sub alternatives {
 
                 # Identity: (a/b)^x = a^x / b^x
                 if (ref($x) eq 'Math::Bacovia::Fraction') {
-                    if ($opt{full}) {
-                        push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives(%opt);
-                    }
-                    else {
-                        push @alt, $x->{num}**$y / $x->{den}**$y;
-                    }
+                    push @alt, $x->{num}**$y / $x->{den}**$y;
                 }
 
                 # Identity: x^2 = x*x

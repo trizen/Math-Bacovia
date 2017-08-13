@@ -84,12 +84,20 @@ sub alternatives {
             }
 
             if ($opt{full}) {
+
+                # Identity: log(a * b) = log(a) + log(b)
                 if (ref($o) eq 'Math::Bacovia::Product') {
                     push @alt, 'Math::Bacovia::Sum'->new(map { __PACKAGE__->new($_) } @{$o->{values}});
                 }
 
+                # Identity: log(a / b) = log(a) - log(b)
                 if (ref($o) eq 'Math::Bacovia::Fraction') {
                     push @alt, 'Math::Bacovia::Difference'->new(__PACKAGE__->new($o->{num}), __PACKAGE__->new($o->{den}));
+                }
+
+                # Identity: log(a^b) = log(a) * b
+                if (ref($o) eq 'Math::Bacovia::Power') {
+                    push @alt, __PACKAGE__->new($o->{base}) * $o->{power};
                 }
             }
         }
