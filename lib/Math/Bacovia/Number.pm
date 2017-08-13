@@ -6,6 +6,8 @@ use warnings;
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $value) = @_;
 
@@ -17,7 +19,7 @@ sub new {
         $value = 'Math::AnyNum'->new($value);
     }
 
-    bless {value => $value}, $class;
+    $cache{$value->stringify} //= bless {value => $value}, $class;
 }
 
 sub inside {

@@ -6,6 +6,8 @@ use warnings;
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $base, $power) = @_;
 
@@ -18,10 +20,10 @@ sub new {
         $power = $Math::Bacovia::ONE;
     }
 
-    bless {
-           base  => $base,
-           power => $power,
-          }, $class;
+    $cache{join(';', $base->stringify, $power->stringify)} //= bless {
+                                                                      base  => $base,
+                                                                      power => $power,
+                                                                     }, $class;
 }
 
 sub inside {

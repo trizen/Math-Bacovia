@@ -6,6 +6,8 @@ use warnings;
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $numerator, $denominator) = @_;
 
@@ -23,10 +25,10 @@ sub new {
         $denominator = $Math::Bacovia::ONE;
     }
 
-    bless {
-           num => $numerator,
-           den => $denominator,
-          }, $class;
+    $cache{join(';', $numerator->stringify, $denominator->stringify)} //= bless {
+                                                                                 num => $numerator,
+                                                                                 den => $denominator,
+                                                                                }, $class;
 }
 
 sub inside {
