@@ -3,6 +3,7 @@
 use utf8;
 use 5.014;
 
+use lib qw(../lib);
 use Math::Bacovia qw(:all);
 use Math::AnyNum qw(bernfrac binomial);
 

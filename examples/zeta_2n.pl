@@ -17,5 +17,5 @@ sub zeta_2n {
 }
 
 foreach my $n (1 .. 5) {
-    say zeta_2n($n)->simple->pretty;
+    say zeta_2n($n)->simple(full => 1)->pretty;
 }
