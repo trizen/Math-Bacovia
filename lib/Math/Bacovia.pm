@@ -551,13 +551,14 @@ sub acsch {
     $x->{_acsch} //= 'Math::Bacovia::Log'->new($x->inv + &sqrt($ONE + (($x**$TWO)->inv)));
 }
 
-#
-## SIMPLIFICATION
-#
-
 sub simple {
     my ($x, %opt) = @_;
     $x->{_simple} //= ((List::UtilsBy::XS::min_by { length($_->pretty) } ($x->alternatives(%opt)))[0]);
+}
+
+sub expand {
+    my ($x, %opt) = @_;
+    $x->{_expand} //= ((List::UtilsBy::XS::max_by { length($_->pretty) } ($x->alternatives(%opt)))[0]);
 }
 
 sub alternatives {
