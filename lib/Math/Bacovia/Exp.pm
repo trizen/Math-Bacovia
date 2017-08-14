@@ -6,10 +6,12 @@ use warnings;
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $value) = @_;
     Math::Bacovia::Utils::check_type(\$value);
-    bless {value => $value}, $class;
+    $cache{$value->stringify} //= bless {value => $value}, $class;
 }
 
 sub inside {
@@ -85,8 +87,10 @@ sub alternatives {
 
             push @alt, __PACKAGE__->new($o);
 
+            # Identity: exp(log(x) * y) = x^y
             if (ref($o) eq 'Math::Bacovia::Product' and @{$o->{values}} == 2) {
                 my ($x, $y) = @{$o->{values}};
+
                 if (ref($x) eq 'Math::Bacovia::Log') {
                     push @alt, 'Math::Bacovia::Power'->new($x->{value}, $y);
                 }
@@ -94,8 +98,25 @@ sub alternatives {
                     push @alt, 'Math::Bacovia::Power'->new($y->{value}, $x);
                 }
             }
+
+            # Identity: exp(log(x)) = x
             elsif (ref($o) eq 'Math::Bacovia::Log') {
                 push @alt, $o->{value};
+            }
+
+            if ($opt{full}) {
+
+                # Identity: exp(a + b) = exp(a) * exp(b)
+                if (ref($o) eq 'Math::Bacovia::Sum') {
+                    push @alt, 'Math::Bacovia::Product'->new(map { __PACKAGE__->new($_) } @{$o->{values}});
+                }
+
+#<<<
+                # Identity: exp(a - b) = exp(a) / exp(b)
+                if (ref($o) eq 'Math::Bacovia::Difference') {
+                    push @alt, 'Math::Bacovia::Fraction'->new(__PACKAGE__->new($o->{minuend}), __PACKAGE__->new($o->{subtrahend}));
+                }
+#>>>
             }
         }
 

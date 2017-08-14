@@ -6,10 +6,12 @@ use warnings;
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $value) = @_;
     Math::Bacovia::Utils::check_type(\$value);
-    bless {value => $value}, $class;
+    $cache{$value->stringify} //= bless {value => $value}, $class;
 }
 
 sub inside {
@@ -79,6 +81,24 @@ sub alternatives {
 
             if (ref($o) eq 'Math::Bacovia::Exp') {
                 push @alt, $o->{value};
+            }
+
+            if ($opt{full}) {
+
+                # Identity: log(a * b) = log(a) + log(b)
+                if (ref($o) eq 'Math::Bacovia::Product') {
+                    push @alt, 'Math::Bacovia::Sum'->new(map { __PACKAGE__->new($_) } @{$o->{values}});
+                }
+
+                # Identity: log(a / b) = log(a) - log(b)
+                if (ref($o) eq 'Math::Bacovia::Fraction') {
+                    push @alt, 'Math::Bacovia::Difference'->new(__PACKAGE__->new($o->{num}), __PACKAGE__->new($o->{den}));
+                }
+
+                # Identity: log(a^b) = log(a) * b
+                if (ref($o) eq 'Math::Bacovia::Power') {
+                    push @alt, __PACKAGE__->new($o->{base}) * $o->{power};
+                }
             }
         }
 

@@ -6,6 +6,8 @@ use warnings;
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $numerator, $denominator) = @_;
 
@@ -23,10 +25,10 @@ sub new {
         $denominator = $Math::Bacovia::ONE;
     }
 
-    bless {
-           num => $numerator,
-           den => $denominator,
-          }, $class;
+    $cache{join(';', $numerator->stringify, $denominator->stringify)} //= bless {
+                                                                                 num => $numerator,
+                                                                                 den => $denominator,
+                                                                                }, $class;
 }
 
 sub inside {
@@ -203,8 +205,38 @@ sub alternatives {
 
                 push @alt, __PACKAGE__->new($num, $den);
 
+                # Identity: 1/x = inv(x)
+                if ($num == $Math::Bacovia::ONE) {
+                    push @alt, $den->inv;
+                }
+
+                # Identity: a^x / b^x = (a/b)^x
+                if (    ref($num) eq 'Math::Bacovia::Power'
+                    and ref($den) eq 'Math::Bacovia::Power'
+                    and $num->{power} == $den->{power}) {
+                    push @alt, 'Math::Bacovia::Power'->new($num->{base} / $den->{base}, $num->{power});
+                }
+
+                # Identity: a^x / a = a^(x-1)
+                if (ref($num) eq 'Math::Bacovia::Power'
+                    and $num->{base} == $den) {
+                    push @alt, 'Math::Bacovia::Power'->new($num->{base}, $num->{power} - $Math::Bacovia::ONE);
+                }
+
                 if ($opt{full}) {
+                    push @alt, $den->inv * $num;
+                    push @alt, $num * $den->inv;
                     push @alt, $num / $den;
+
+                    # Identity: (a + b) / c = a/c + b/c
+                    if (ref($num) eq 'Math::Bacovia::Sum') {
+                        push @alt, 'Math::Bacovia::Sum'->new(map { $_ / $den } @{$num->{values}});
+                    }
+
+                    # Identity: (a * b) / c = (a * b * 1/c)
+                    if (ref($num) eq 'Math::Bacovia::Product') {
+                        push @alt, $num * $den->inv;
+                    }
                 }
                 elsif (    ref($num) eq 'Math::Bacovia::Number'
                        and ref($den) eq 'Math::Bacovia::Number') {

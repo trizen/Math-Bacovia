@@ -6,6 +6,8 @@ use warnings;
 use Class::Multimethods;
 use parent qw(Math::Bacovia);
 
+my %cache;
+
 sub new {
     my ($class, $base, $power) = @_;
 
@@ -18,10 +20,10 @@ sub new {
         $power = $Math::Bacovia::ONE;
     }
 
-    bless {
-           base  => $base,
-           power => $power,
-          }, $class;
+    $cache{join(';', $base->stringify, $power->stringify)} //= bless {
+                                                                      base  => $base,
+                                                                      power => $power,
+                                                                     }, $class;
 }
 
 sub inside {
@@ -152,12 +154,7 @@ sub alternatives {
 
                 # Identity: (a/b)^x = a^x / b^x
                 if (ref($x) eq 'Math::Bacovia::Fraction') {
-                    if ($opt{full}) {
-                        push @alt, ($x->{num}**$y / $x->{den}**$y)->alternatives(%opt);
-                    }
-                    else {
-                        push @alt, $x->{num}**$y / $x->{den}**$y;
-                    }
+                    push @alt, $x->{num}**$y / $x->{den}**$y;
                 }
 
                 # Identity: x^2 = x*x
