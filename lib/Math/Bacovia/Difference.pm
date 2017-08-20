@@ -124,8 +124,10 @@ sub neg {
 Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
 
-    ($x->{minuend} == $y->{minuend})
-      && ($x->{subtrahend} == $y->{subtrahend});
+         (ref($x->{minuend}) eq ref($y->{minuend}))
+      && (ref($x->{subtrahend}) eq ref($y->{subtrahend}))
+      && ($x->{minuend}->eq($y->{minuend}))
+      && ($x->{subtrahend}->eq($y->{subtrahend}));
 };
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
@@ -180,13 +182,13 @@ sub alternatives {
         foreach my $minuend (@a_num) {
             foreach my $subtrahend (@a_den) {
 
-                if ($subtrahend == $Math::Bacovia::ZERO) {
+                if (ref($subtrahend) eq 'Math::Bacovia::Number' and $subtrahend->{value} == 0) {
                     push @alt, $minuend;
                 }
-                elsif ($minuend == $Math::Bacovia::ZERO) {
+                elsif (ref($minuend) eq 'Math::Bacovia::Number' and $minuend->{value} == 0) {
                     push @alt, $subtrahend->neg;
                 }
-                elsif ($minuend == $subtrahend) {
+                elsif (ref($minuend) eq ref($subtrahend) and $minuend->eq($subtrahend)) {
                     push @alt, $Math::Bacovia::ZERO;
                 }
                 else {

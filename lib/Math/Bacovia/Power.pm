@@ -48,7 +48,8 @@ sub inv {
 Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
 
-    if ($x->{base} == $y->{base}) {
+    if (ref($x->{base}) eq ref($y->{base})
+        and $x->{base}->eq($y->{base})) {
         __PACKAGE__->new($x->{base}, $x->{power} + $y->{power});
     }
     else {
@@ -59,7 +60,8 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, __PACKAGE__) => sub {
 Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
 
-    if ($x->{base} == $y->{base}) {
+    if (ref($x->{base}) eq ref($y->{base})
+        and $x->{base}->eq($y->{base})) {
         __PACKAGE__->new($x->{base}, $x->{power} - $y->{power});
     }
     else {
@@ -73,8 +75,11 @@ Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
-    ($x->{base} == $y->{base})
-      && ($x->{power} == $y->{power});
+
+         (ref($x->{base}) eq ref($y->{base}))
+      && (ref($x->{power}) eq ref($y->{power}))
+      && ($x->{base}->eq($y->{base}))
+      && ($x->{power}->eq($y->{power}));
 };
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
@@ -138,17 +143,17 @@ sub alternatives {
                 }
 
                 # Identity: x^0 = 1
-                if ($y == $Math::Bacovia::ZERO) {
+                if (ref($y) eq 'Math::Bacovia::Number' and $y->{value} == 0) {
                     push @alt, $Math::Bacovia::ONE;
                 }
 
                 # Identity: 1^x = 1
-                if ($x == $Math::Bacovia::ONE) {
+                if (ref($x) eq 'Math::Bacovia::Number' and $x->{value} == 1) {
                     push @alt, $x;
                 }
 
                 # Identity: x^1 = x
-                if ($y == $Math::Bacovia::ONE) {
+                if (ref($y) eq 'Math::Bacovia::Number' and $y->{value} == 1) {
                     push @alt, $x;
                 }
 
@@ -181,7 +186,8 @@ sub alternatives {
                 # Identity: x^(y/log(x)) = exp(y)
                 if (    ref($y) eq 'Math::Bacovia::Fraction'
                     and ref($y->{den}) eq 'Math::Bacovia::Log'
-                    and $x == $y->{den}{value}) {
+                    and ref($x) eq ref($y->{den}{value})
+                    and $x->eq($y->{den}{value})) {
                     if (ref($y->{num}) eq 'Math::Bacovia::Log') {
                         push @alt, $y->{num}{value};
                     }

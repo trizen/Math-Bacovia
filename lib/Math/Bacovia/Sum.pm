@@ -15,7 +15,8 @@ sub new {
         if (ref($value) eq __PACKAGE__) {
             push @values, @{$value->{values}};
         }
-        elsif ($value != $Math::Bacovia::ZERO) {
+        elsif (ref($value) ne 'Math::Bacovia::Number'
+               or $value->{value} != 0) {
             push @flat, $value;
         }
     }
@@ -112,7 +113,12 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
     (@p1 == @p2) || return !1;
 
     while (@p1 && @p2) {
-        (shift(@p1)->eq(shift(@p2))) || return !1;
+
+        my $first  = shift(@p1);
+        my $second = shift(@p2);
+
+        (ref($first) eq ref($second) and $first->eq($second))
+          || return !1;
     }
 
     return 1;
@@ -161,7 +167,7 @@ sub alternatives {
 #<<<
             @partial = (
                 List::UtilsBy::XS::nsort_by { $Math::Bacovia::HIERARCHY{ref($_)} }
-                grep { $_ != $Math::Bacovia::ZERO } @partial
+                grep { ref($_) ne 'Math::Bacovia::Number' or $_->{value} != 0 } @partial
             );
 #>>>
 
