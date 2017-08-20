@@ -142,8 +142,10 @@ sub inv {
 Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
 
-    ($x->{num} == $y->{num})
-      && ($x->{den} == $y->{den});
+         (ref($x->{num}) eq ref($y->{num}))
+      && (ref($x->{den}) eq ref($y->{den}))
+      && ($x->{num}->eq($y->{num}))
+      && ($x->{den}->eq($y->{den}));
 };
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
@@ -195,31 +197,35 @@ sub alternatives {
         foreach my $num (@a_num) {
             foreach my $den (@a_den) {
 
-                if ($den == $Math::Bacovia::ONE) {
+                # Identity: x/1 = x
+                if (ref($den) eq 'Math::Bacovia::Number' and $den->{value} == 1) {
                     push @alt, $num;
                 }
 
-                if ($num == $den) {
+                # Identity: x/x = 1
+                if (ref($num) eq ref($den) and $num->eq($den)) {
                     push @alt, $Math::Bacovia::ONE;
                 }
 
                 push @alt, __PACKAGE__->new($num, $den);
 
                 # Identity: 1/x = inv(x)
-                if ($num == $Math::Bacovia::ONE) {
+                if (ref($num) eq 'Math::Bacovia::Number' and $num->{value} == 1) {
                     push @alt, $den->inv;
                 }
 
                 # Identity: a^x / b^x = (a/b)^x
                 if (    ref($num) eq 'Math::Bacovia::Power'
                     and ref($den) eq 'Math::Bacovia::Power'
-                    and $num->{power} == $den->{power}) {
+                    and ref($num->{power}) eq ref($den->{power})
+                    and $num->{power}->eq($den->{power})) {
                     push @alt, 'Math::Bacovia::Power'->new($num->{base} / $den->{base}, $num->{power});
                 }
 
                 # Identity: a^x / a = a^(x-1)
-                if (ref($num) eq 'Math::Bacovia::Power'
-                    and $num->{base} == $den) {
+                if (    ref($num) eq 'Math::Bacovia::Power'
+                    and ref($num->{base}) eq ref($den)
+                    and $num->{base}->eq($den)) {
                     push @alt, 'Math::Bacovia::Power'->new($num->{base}, $num->{power} - $Math::Bacovia::ONE);
                 }
 

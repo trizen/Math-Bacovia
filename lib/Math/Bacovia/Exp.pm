@@ -48,7 +48,9 @@ sub inv {
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
     my ($x, $y) = @_;
-    $x->{value} == $y->{value};
+
+    (ref($x->{value}) eq ref($y->{value}))
+      && ($x->{value}->eq($y->{value}));
 };
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {

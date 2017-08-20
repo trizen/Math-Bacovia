@@ -40,7 +40,10 @@ sub neg {
 #
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, __PACKAGE__) => sub {
-    $_[0]->{value} == $_[1]->{value};
+    my ($x, $y) = @_;
+
+    (ref($x->{value}) eq ref($y->{value}))
+      && ($x->{value}->eq($y->{value}));
 };
 
 Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
