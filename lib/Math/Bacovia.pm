@@ -167,15 +167,15 @@ sub i() {
 }
 
 my %exported_functions = (
-                          Exp        => \&Exp,
-                          Log        => \&Log,
-                          Product    => \&Product,
-                          Sum        => \&Sum,
-                          Power      => \&Power,
-                          Symbol     => \&Symbol,
-                          Number     => \&Number,
-                          Fraction   => \&Fraction,
-                          Difference => \&Difference,
+                          Exp        => \&_exp,
+                          Log        => \&_log,
+                          Product    => \&_product,
+                          Sum        => \&_sum,
+                          Power      => \&_power,
+                          Symbol     => \&_symbol,
+                          Number     => \&_number,
+                          Fraction   => \&_fraction,
+                          Difference => \&_difference,
                          );
 
 my %exported_constants = (
@@ -226,39 +226,39 @@ sub import {
 
 =cut
 
-sub Log {
+sub _log {
     'Math::Bacovia::Log'->new(@_);
 }
 
-sub Exp {
+sub _exp {
     'Math::Bacovia::Exp'->new(@_);
 }
 
-sub Fraction {
+sub _fraction {
     'Math::Bacovia::Fraction'->new(@_);
 }
 
-sub Difference {
+sub _difference {
     'Math::Bacovia::Difference'->new(@_);
 }
 
-sub Power {
+sub _power {
     'Math::Bacovia::Power'->new(@_);
 }
 
-sub Sum {
+sub _sum {
     'Math::Bacovia::Sum'->new(@_);
 }
 
-sub Product {
+sub _product {
     'Math::Bacovia::Product'->new(@_);
 }
 
-sub Symbol {
+sub _symbol {
     'Math::Bacovia::Symbol'->new(@_);
 }
 
-sub Number {
+sub _number {
     'Math::Bacovia::Number'->new(@_);
 }
 
