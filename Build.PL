@@ -22,6 +22,7 @@ my $builder = Module::Build->new(
                   'perl'                => 5.014,
                   'Math::AnyNum'        => 0.01,
                   'List::UtilsBy::XS'   => 0,
+                  'Set::Product::XS'    => 0.04,
                   'Class::Multimethods' => 1.70,
                  },
      add_to_cleanup     => ['Math-Bacovia-*'],

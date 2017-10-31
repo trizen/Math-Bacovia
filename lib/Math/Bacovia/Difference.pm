@@ -3,7 +3,7 @@ package Math::Bacovia::Difference;
 use 5.014;
 use warnings;
 
-use Class::Multimethods;
+use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
 my %cache;

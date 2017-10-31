@@ -9,6 +9,7 @@ WriteMakefile
                    'Class::Multimethods' => '1.7',
                    'List::UtilsBy::XS' => 0,
                    'Math::AnyNum' => '0.01',
+                   'Set::Product::XS' => '0.04',
                    'Test::More' => 0
                  },
   'INSTALLDIRS' => 'site',

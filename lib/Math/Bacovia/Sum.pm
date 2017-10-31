@@ -3,7 +3,8 @@ package Math::Bacovia::Sum;
 use 5.014;
 use warnings;
 
-use Class::Multimethods;
+use Set::Product::XS qw(product);
+use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
 sub new {
@@ -137,10 +138,10 @@ sub alternatives {
     $x->{_alt} //= do {
         my @alt;
 
-        Math::Bacovia::Utils::cartesian {
+        product {
             my (@c) = @_;
 
-            my %table;
+            my %table = ();
             foreach my $v (@c) {
                 if (ref($v) eq __PACKAGE__) {
                     push @c, @{$v->{values}};
@@ -150,7 +151,7 @@ sub alternatives {
                 }
             }
 
-            my @partial;
+            my @partial = ();
             foreach my $group (values(%table)) {
                 my $sum = shift(@$group);
                 foreach my $v (@{$group}) {

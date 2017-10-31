@@ -41,6 +41,7 @@ requires:
   Class::Multimethods: '1.7'
   List::UtilsBy::XS: '0'
   Math::AnyNum: '0.01'
+  Set::Product::XS: '0.04'
   perl: '5.014'
 resources:
   license: http://www.perlfoundation.org/artistic_license_2_0

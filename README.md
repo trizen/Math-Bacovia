@@ -199,6 +199,7 @@ Output:
 Math::Bacovia requires the following modules:
 
 * [Math::AnyNum](https://github.com/trizen/Math-AnyNum)
+* [Set::Product::XS](https://metacpan.org/pod/Set::Product::XS)
 * [List::UtilsBy::XS](https://metacpan.org/release/List-UtilsBy-XS)
 
 # INSTALLATION
