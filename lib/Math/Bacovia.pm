@@ -381,13 +381,14 @@ Sinus of a symbolic expression.
 
 =cut
 
+# sin(x) = (exp(x * i) - exp(-i * x))/(2*i)
 sub sin {
     my ($x) = @_;
     $x->{_sin} //=
       'Math::Bacovia::Fraction'->new('Math::Bacovia::Exp'->new(i * $x) - 'Math::Bacovia::Exp'->new(-i * $x), $TWO * i);
 }
 
-# asin(x) = -i log(i x + &sqrt(1 - x^2))
+# asin(x) = -i * log(i x + sqrt(1 - x^2))
 sub asin {
     my ($x) = @_;
     $x->{_asin} //= -i * 'Math::Bacovia::Log'->new(i * $x + &sqrt($ONE - $x**$TWO));
@@ -400,7 +401,7 @@ sub sinh {
       'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $MONE), ($TWO * 'Math::Bacovia::Exp'->new($x)));
 }
 
-# asinh(x) = log(&sqrt(x^2 + 1) + x)
+# asinh(x) = log(sqrt(x^2 + 1) + x)
 sub asinh {
     my ($x) = @_;
     $x->{_asinh} //= 'Math::Bacovia::Log'->new(&sqrt($x**$TWO + $ONE) + $x);
@@ -422,11 +423,13 @@ sub acos {
 # cosh(x) = (exp(2x) + 1) / (2*exp(x))
 sub cosh {
     my ($x) = @_;
-    $x->{_cosh} //=
-      'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $ONE), ($TWO * 'Math::Bacovia::Exp'->new($x)));
+
+#<<<
+    $x->{_cosh} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $ONE), ($TWO * 'Math::Bacovia::Exp'->new($x)));
+#>>>
 }
 
-# acosh(x) = log(&sqrt(x^2 - 1) + x)
+# acosh(x) = log(x + sqrt(x - 1) * sqrt(x + 1))
 sub acosh {
     my ($x) = @_;
     $x->{_acosh} //= 'Math::Bacovia::Log'->new($x + &sqrt($x + $MONE) * &sqrt($x + $ONE));
@@ -438,10 +441,13 @@ sub tan {
     $x->{_tan} //= -i + 'Math::Bacovia::Fraction'->new($TWO * i, $ONE + 'Math::Bacovia::Exp'->new($TWO * i * $x));
 }
 
-# atan(x) = -i log((1 + i x)/&sqrt(1 + x^2))
+# atan(x) = i/2 * (log(1 - i*x) - log(1 + i*x))
 sub atan {
     my ($x) = @_;
-    $x->{_atan} //= -i * 'Math::Bacovia::Log'->new('Math::Bacovia::Fraction'->new($ONE + i * $x, &sqrt($ONE + $x**$TWO)));
+
+#<<<
+    $x->{_atan} //= i * 'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE - i * $x) - 'Math::Bacovia::Log'->new($ONE + i * $x), $TWO);
+#>>>
 }
 
 # tanh(x) = (exp(2x) - 1) / (exp(2x) + 1)
@@ -451,10 +457,11 @@ sub tanh {
                                                    ('Math::Bacovia::Exp'->new($TWO * $x) + $ONE));
 }
 
-# atanh(x) = log(&sqrt(1 + x)/&sqrt(1 - x))
+# atanh(x) = (log(1 + x) - log(1 - x)) / 2
 sub atanh {
     my ($x) = @_;
-    $x->{_atanh} //= 'Math::Bacovia::Log'->new(&sqrt($ONE + $x) / &sqrt($ONE - $x));
+    $x->{_atanh} //=
+      'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE + $x) - 'Math::Bacovia::Log'->new($ONE - $x), $TWO);
 }
 
 # cot(x) = i + (2*i)/(-1 + exp(2*i*x))
@@ -463,14 +470,17 @@ sub cot {
     $x->{_cot} //= i + 'Math::Bacovia::Fraction'->new($TWO * i, $MONE + 'Math::Bacovia::Exp'->new($TWO * i * $x));
 }
 
-# acot(x) = i*(log((-i + x)/x) - log((i + x)/x))/2
+# acot(x) = i * (log(i*x) - log(-(i*x)) + log(-1 - i*x) - log(-1 + i*x)) / 2
 sub acot {
     my ($x) = @_;
     $x->{_acot} //= 'Math::Bacovia::Fraction'->new(
                                                    i * (
-                                                        'Math::Bacovia::Log'->new('Math::Bacovia::Fraction'->new(-i + $x, $x))
-                                                          - 'Math::Bacovia::Log'
-                                                          ->new('Math::Bacovia::Fraction'->new(i + $x, $x))
+                                                        (
+                                                         'Math::Bacovia::Log'->new(i * $x) -
+                                                           'Math::Bacovia::Log'->new(-(i * $x)) +
+                                                           'Math::Bacovia::Log'->new(-1 - i * $x) -
+                                                           'Math::Bacovia::Log'->new(-1 + i * $x)
+                                                        )
                                                        ),
                                                    $TWO
                                                   );
@@ -483,18 +493,16 @@ sub coth {
                                                    ('Math::Bacovia::Exp'->new($TWO * $x) + $MONE));
 }
 
-# acoth(x) = (-log((-1 + x)/x) + log((1 + x)/x))/2
+# acoth(x) = (log(-1 - x) - log(-1 + x) - log(-x) + log(x)) / 2
 sub acoth {
     my ($x) = @_;
     $x->{_acoth} //= 'Math::Bacovia::Fraction'->new(
-                                                    'Math::Bacovia::Log'->new(
-                                                                              'Math::Bacovia::Fraction'->new($x + $ONE, $x) /
-                                                                                'Math::Bacovia::Fraction'->new($x + $MONE, $x)
-                                                                             ),
+                                                    'Math::Bacovia::Log'->new($MONE - $x) -
+                                                      'Math::Bacovia::Log'->new($MONE + $x) -
+                                                      'Math::Bacovia::Log'->new(-$x) +
+                                                      'Math::Bacovia::Log'->new($x),
                                                     $TWO
                                                    );
-
-    #'Math::Bacovia::Log'->new(&sqrt('Math::Bacovia::Fraction'->new($x + 1, $x - 1)))
 }
 
 # sec(x) = 2/(exp(-i*x) + exp(i*x))
@@ -504,7 +512,7 @@ sub sec {
       'Math::Bacovia::Fraction'->new($TWO, 'Math::Bacovia::Exp'->new(-i * $x) + 'Math::Bacovia::Exp'->new(i * $x));
 }
 
-# asec(x) = π/2 + i log(i/x + &sqrt(1 - 1/x^2))
+# asec(x) = π/2 + i log(i/x + sqrt(1 - 1/x^2))
 sub asec {
     my ($x) = @_;
     my $inv = $x->inv;
@@ -518,7 +526,7 @@ sub sech {
       'Math::Bacovia::Fraction'->new(($TWO * 'Math::Bacovia::Exp'->new($x)), ('Math::Bacovia::Exp'->new($TWO * $x) + $ONE));
 }
 
-# asech(x) = log(1/x + &sqrt(-1 + 1/x) &sqrt(1 + 1/x))
+# asech(x) = log(1/x + sqrt(-1 + 1/x) * sqrt(1 + 1/x))
 sub asech {
     my ($x) = @_;
     my $inv = $x->inv;
@@ -532,7 +540,7 @@ sub csc {
       'Math::Bacovia::Fraction'->new(-$TWO * i, 'Math::Bacovia::Exp'->new(-i * $x) - 'Math::Bacovia::Exp'->new(i * $x));
 }
 
-# acsc(x) = -i log(i/x + &sqrt(1 - 1/x^2))
+# acsc(x) = -i * log(i/x + sqrt(1 - 1/x^2))
 sub acsc {
     my ($x) = @_;
     $x->{_acsc} //= -i * 'Math::Bacovia::Log'->new('Math::Bacovia::Fraction'->new(i, $x) + &sqrt($ONE - (($x**$TWO)->inv)));
@@ -545,7 +553,7 @@ sub csch {
       'Math::Bacovia::Fraction'->new(($TWO * 'Math::Bacovia::Exp'->new($x)), ('Math::Bacovia::Exp'->new($TWO * $x) - $ONE));
 }
 
-# acsch(x) = log(1/x + &sqrt(1 + 1/x^2))
+# acsch(x) = log(1/x + sqrt(1 + 1/x^2))
 sub acsch {
     my ($x) = @_;
     $x->{_acsch} //= 'Math::Bacovia::Log'->new($x->inv + &sqrt($ONE + (($x**$TWO)->inv)));
