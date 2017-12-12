@@ -157,6 +157,20 @@ sub alternatives {
                     push @alt, $x;
                 }
 
+                if (    ref($x) eq 'Math::Bacovia::Number'
+                    and ref($y) eq 'Math::Bacovia::Number') {
+
+                    # Integer or rational exponentation
+                    if (ref(${$y->{value}}) eq 'Math::GMPz') {
+
+                        my $ref_x = ref(${$x->{value}});
+
+                        if ($ref_x eq 'Math::GMPz' or $ref_x eq 'Math::GMPq') {
+                            push @alt, 'Math::Bacovia::Number'->new($x->{value}**$y->{value});
+                        }
+                    }
+                }
+
                 # Identity: (a/b)^x = a^x / b^x
                 if (ref($x) eq 'Math::Bacovia::Fraction') {
                     push @alt, $x->{num}**$y / $x->{den}**$y;

@@ -102,15 +102,16 @@ Bellow we describe the special methods provided by this library:
 Returns an array with alternative representations from the self-expression.
 
 ```perl
-say for Exp(Log(3) * 2)->alternatives;
+say for Exp(Log(Fraction(1,3)) * 2)->alternatives;
 ```
 
 Output:
 
 ```perl
-Exp(Product(Log(3), 2))
-Power(3, 2)
-9
+Exp(Product(2, Log(Fraction(1, 3))))
+Power(Fraction(1, 3), 2)
+Exp(Product(2, Log(1/3)))
+Power(1/3, 2)
 ```
 
 This method also accepts currently two options:
@@ -175,30 +176,20 @@ Output:
 
 #### # `numeric()`
 
-Evaluates the self-expression numerically and returns the result as a Number object.
+Evaluates the self-expression numerically and returns the result as a [Math::AnyNum](https://metacpan.org/release/Math-AnyNum) object.
 
 ```perl
-my $x = Symbol('x');
+my $x = Symbol('x', 13);
 my $expr = ($x**2 - $x + 41);
 
-for my $n (1..3) {
-    local $x->{value} = $n;
-    say $expr->numeric;
-}
-```
-
-Output:
-```ruby
-41
-43
-47
+say $expr->numeric;     #=> 197
 ```
 
 # DEPENDENCIES
 
 Math::Bacovia requires the following modules:
 
-* [Math::AnyNum](https://github.com/trizen/Math-AnyNum)
+* [Math::AnyNum](https://metacpan.org/release/Math-AnyNum)
 * [Set::Product::XS](https://metacpan.org/pod/Set::Product::XS)
 * [List::UtilsBy::XS](https://metacpan.org/release/List-UtilsBy-XS)
 
