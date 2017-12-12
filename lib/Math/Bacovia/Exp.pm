@@ -6,11 +6,13 @@ use warnings;
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+our $VERSION = $Math::Bacovia::VERSION;
+
 my %cache;
 
 sub new {
     my ($class, $value) = @_;
-    Math::Bacovia::Utils::check_type(\$value);
+    Math::Bacovia::_check_type(\$value);
     $cache{$value->stringify} //= bless {value => $value}, $class;
 }
 

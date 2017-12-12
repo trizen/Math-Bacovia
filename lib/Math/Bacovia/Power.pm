@@ -6,15 +6,17 @@ use warnings;
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+our $VERSION = $Math::Bacovia::VERSION;
+
 my %cache;
 
 sub new {
     my ($class, $base, $power) = @_;
 
-    Math::Bacovia::Utils::check_type(\$base);
+    Math::Bacovia::_check_type(\$base);
 
     if (defined($power)) {
-        Math::Bacovia::Utils::check_type(\$power);
+        Math::Bacovia::_check_type(\$power);
     }
     else {
         $power = $Math::Bacovia::ONE;

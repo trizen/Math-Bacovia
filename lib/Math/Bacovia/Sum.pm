@@ -7,9 +7,11 @@ use Set::Product::XS qw(product);
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+our $VERSION = $Math::Bacovia::VERSION;
+
 sub new {
     my ($class, @values) = @_;
-    Math::Bacovia::Utils::check_type(\$_) for @values;
+    Math::Bacovia::_check_type(\$_) for @values;
 
     my @flat;
     foreach my $value (@values) {

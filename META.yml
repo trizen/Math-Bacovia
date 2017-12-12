@@ -1,7 +1,7 @@
 ---
 abstract: 'Symbolic math library.'
 author:
-  - 'Daniel Șuteu <trizenx@gmail.com>'
+  - 'Daniel Șuteu <trizen@protonmail.com>'
 build_requires:
   Test::More: '0'
 configure_requires:
@@ -35,12 +35,10 @@ provides:
     file: lib/Math/Bacovia/Sum.pm
   Math::Bacovia::Symbol:
     file: lib/Math/Bacovia/Symbol.pm
-  Math::Bacovia::Utils:
-    file: lib/Math/Bacovia/Utils.pm
 requires:
   Class::Multimethods: '1.7'
   List::UtilsBy::XS: '0'
-  Math::AnyNum: '0.01'
+  Math::AnyNum: '0.14'
   Set::Product::XS: '0.04'
   perl: '5.014'
 resources:

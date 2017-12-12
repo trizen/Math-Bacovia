@@ -9,7 +9,7 @@ use Module::Build;
 my $builder = Module::Build->new(
      module_name        => 'Math::Bacovia',
      license            => 'artistic_2',
-     dist_author        => q{Daniel Șuteu <trizenx@gmail.com>},
+     dist_author        => q{Daniel Șuteu <trizen@protonmail.com>},
      dist_version_from  => 'lib/Math/Bacovia.pm',
      release_status     => 'stable',
      configure_requires => {
@@ -20,7 +20,7 @@ my $builder = Module::Build->new(
                        },
      requires => {
                   'perl'                => 5.014,
-                  'Math::AnyNum'        => 0.01,
+                  'Math::AnyNum'        => 0.14,
                   'List::UtilsBy::XS'   => 0,
                   'Set::Product::XS'    => 0.04,
                   'Class::Multimethods' => 1.70,

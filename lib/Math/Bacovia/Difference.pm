@@ -6,20 +6,22 @@ use warnings;
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+our $VERSION = $Math::Bacovia::VERSION;
+
 my %cache;
 
 sub new {
     my ($class, $minuend, $subtrahend) = @_;
 
     if (defined($minuend)) {
-        Math::Bacovia::Utils::check_type(\$minuend);
+        Math::Bacovia::_check_type(\$minuend);
     }
     else {
         $minuend = $Math::Bacovia::ZERO;
     }
 
     if (defined($subtrahend)) {
-        Math::Bacovia::Utils::check_type(\$subtrahend);
+        Math::Bacovia::_check_type(\$subtrahend);
     }
     else {
         $subtrahend = $Math::Bacovia::ZERO;

@@ -6,20 +6,22 @@ use warnings;
 use Class::Multimethods qw();
 use parent qw(Math::Bacovia);
 
+our $VERSION = $Math::Bacovia::VERSION;
+
 my %cache;
 
 sub new {
     my ($class, $numerator, $denominator) = @_;
 
     if (defined($numerator)) {
-        Math::Bacovia::Utils::check_type(\$numerator);
+        Math::Bacovia::_check_type(\$numerator);
     }
     else {
         $numerator = $Math::Bacovia::ZERO;
     }
 
     if (defined($denominator)) {
-        Math::Bacovia::Utils::check_type(\$denominator);
+        Math::Bacovia::_check_type(\$denominator);
     }
     else {
         $denominator = $Math::Bacovia::ONE;

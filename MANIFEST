@@ -17,6 +17,7 @@ examples/trigonometry.pl
 examples/various_tests.pl
 examples/zeta_2n.pl
 lib/Math/Bacovia.pm
+lib/Math/Bacovia.pod
 lib/Math/Bacovia/Difference.pm
 lib/Math/Bacovia/Exp.pm
 lib/Math/Bacovia/Fraction.pm
@@ -26,7 +27,6 @@ lib/Math/Bacovia/Power.pm
 lib/Math/Bacovia/Product.pm
 lib/Math/Bacovia/Sum.pm
 lib/Math/Bacovia/Symbol.pm
-lib/Math/Bacovia/Utils.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files

@@ -50,7 +50,7 @@ say $prod->numeric;           #=> 6.25470095193632871640207...
 
 
 say "\n=> Alternative representations:";
-say join ', ', Power(3, 5)->alternatives(full => 1);   #=> Power(3, 5), Exp(Product(Log(3), 5))
+say join ', ', Power(3, 5)->alternatives(full => 1);   #=> Power(3, 5), Exp(Product(Log(3), 5)), 243
 ```
 
 
@@ -99,7 +99,9 @@ Bellow we describe the special methods provided by this library:
 
 #### # `alternatives()`
 
-Returns an array with alternative representations from the self-expression.
+Returns a list with alternative representations from the self-expression.
+
+Example:
 
 ```perl
 say for Exp(Log(Fraction(1,3)) * 2)->alternatives;
@@ -107,18 +109,18 @@ say for Exp(Log(Fraction(1,3)) * 2)->alternatives;
 
 Output:
 
-```perl
+```ruby
 Exp(Product(2, Log(Fraction(1, 3))))
 Power(Fraction(1, 3), 2)
 Exp(Product(2, Log(1/3)))
 Power(1/3, 2)
 ```
 
-This method also accepts currently two options:
+The options supported by this method are:
 
 ```perl
     log  => 1,    # will try to generate logarithmic alternatives
-    full => 1,    # will try to generate more alternatives (may be slow)
+    full => 1,    # will try to generate more alternatives (it may be slow)
 ```
 
 The options can be provided as:
@@ -129,6 +131,26 @@ $obj->alternatives(
     log  => 1,
 );
 ```
+
+Example:
+
+```perl
+say for Power(3, 5)->alternatives(full => 1);
+```
+
+Output:
+
+```ruby
+Power(3, 5)
+Exp(Product(Log(3), 5))
+243
+```
+
+On long and complex expressions, the number of alternative representations grows exponentially.
+
+In combination with the `full` option (set to a true value), the returned list may contain thousands or even millions of alternative expressions.
+
+**NOTE:** This process may use many gigabytes of memory.
 
 #### # `simple()`
 
@@ -151,12 +173,12 @@ Accepts the same options as the `alternatives()` method.
 Returns an expanded version of the self-expression.
 
 ```perl
-say Log(Symbol('x') * Symbol('y'))->expand(full => 1);
+say Power(Fraction(5, 7), Fraction(1, 3))->expand(full => 1);
 ```
 
 Output:
 ```perl
-Sum(Log(Symbol("x")), Log(Symbol("y")))
+Exp(Product(Log(Fraction(5, 7)), Fraction(1, 3)))
 ```
 
 Accepts the same options as the `alternatives()` method.

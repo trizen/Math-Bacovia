@@ -54,7 +54,7 @@ B<Math::Bacovia> is an experimental symbolic math library, including support for
     say $prod->numeric;           #=> 6.25470095193632871640207...
 
     say "\n=> Alternative representations:";
-    say join ', ', Power(3, 5)->alternatives(full => 1);   #=> Power(3, 5), Exp(Product(Log(3), 5))
+    say join ', ', Power(3, 5)->alternatives(full => 1);   #=> Power(3, 5), Exp(Product(Log(3), 5)), 243
 
 =head1 TYPES
 
@@ -64,33 +64,49 @@ The types supported by this library are described bellow:
 
 Represents a symbolic value. Optionally, it can have a numeric value.
 
+See also: L<Math::Bacovia::Symbol>.
+
 =head2 Fraction(numerator, denominator)
 
 Represents a symbolic fraction.
+
+See also: L<Math::Bacovia::Fraction>.
 
 =head2 Difference(minuend, subtrahend)
 
 Represents a symbolic subtraction.
 
+See also: L<Math::Bacovia::Difference>.
+
 =head2 Power(base, power)
 
 Represents a symbolic exponentiation in a symbolic base.
+
+See also: L<Math::Bacovia::Power>.
 
 =head2 Log(x)
 
 Represents the natural logarithm of a symbolic value.
 
+See also: L<Math::Bacovia::Log>.
+
 =head2 Exp(x)
 
 Represents the natural exponentiation of a symbolic value.
+
+See also: L<Math::Bacovia::Exp>.
 
 =head2 Sum(a, b, c, ...)
 
 Represents a summation of an arbitrary (finite) number of symbolic values.
 
+See also: L<Math::Bacovia::Sum>.
+
 =head2 Product(a, b, c, ...)
 
 Represents a product of an arbitrary (finite) number of symbolic values.
+
+See also: L<Math::Bacovia::Product>.
 
 =head1 EXPORT
 
@@ -98,7 +114,7 @@ Importing a name from B<Math::Bacovia> can be done using the following syntax:
 
     use Math::Bacovia qw(Fraction);     # imports the Fraction() function
 
-B<Math::Bacovia> also provides a list of useful constants which can also be imported.
+B<Math::Bacovia> also provides a small list of useful constants which can be imported:
 
     i      the imaginary unit                sqrt(-1)
     e      the e mathematical constant       Exp(1)
@@ -294,21 +310,77 @@ Each type provided by B<Math::Bacovia> includes the same set of methods, defined
 
 This method uses common mathematical identities to create symbolically equivalent expressions from the self-expression.
 
-The options supported by this method are:
-
-    log  => 1,    # will try to generate logarithmic alternatives
-    full => 1,    # will try to generate more alternatives (may be slow)
-
-Returns an array with alternative representations from the self-expression.
-
 Example:
 
-    say for Exp(Log(3) * 2)->alternatives;
+    say for Exp(Log(Fraction(1,3)) * 2)->alternatives;
 
 Output:
 
-    Exp(Product(Log(3), 2))
-    Power(3, 2)
+    Exp(Product(2, Log(Fraction(1, 3))))
+    Power(Fraction(1, 3), 2)
+    Exp(Product(2, Log(1/3)))
+    Power(1/3, 2)
+
+The options supported by this method are:
+
+    log  => 1,    # will try to generate logarithmic alternatives
+    full => 1,    # will try to generate more alternatives (it may be slow)
+
+Example:
+
+    say for Power(3, 5)->alternatives(full => 1);
+
+Output:
+
+    Power(3, 5)
+    Exp(Product(Log(3), 5))
+    243
+
+On long and complex expressions, the number of alternative representations grows exponentially.
+
+In combination with the B<full> option (set to a true value), the returned list may contain thousands or even millions of alternative expressions.
+
+B<WARNING:> On long expressions, this process may take a very long time and use lots of memory.
+
+=head2 simple
+
+    $x->simple(%opt)
+
+Returns a simplification of the self-expression.
+
+    say Exp(Log(Log(Exp(Exp(Log(Symbol('x')))))))->simple;
+
+Output:
+
+    Symbol("x")
+
+It takes the same options as the C<alternatives()> method.
+
+In the current implementation, the simplification of expressions is done by generating all the alternative representations and selecting the shortest expression from this list.
+
+The simplified expression may not always be optimal. In some cases, calling the C<simple()> method on an already simplified expression, the expression may get simplified even further:
+
+    my $expr = $x->simple(full => 1)->simple(full => 1);
+
+B<WARNING:> On long expressions, this process may take a very long time and use lots of memory.
+
+=head2 expand
+
+    $x->expand(%opt)
+
+Returns an expanded version of the self-expression.
+
+    say Power(Fraction(5, 7), Fraction(1, 3))->expand(full => 1);
+
+Output:
+
+    Exp(Product(Log(Fraction(5, 7)), Fraction(1, 3)))
+
+It takes the same options as the C<alternatives()> method.
+
+In the current implementation, the expansion of expressions is done by generating all the alternative representations and selecting the longest expression from this list.
+
+B<WARNING:> On long expressions, this process may take a very long time and use lots of memory.
 
 =head2 numeric
 

@@ -4,6 +4,10 @@ use 5.014;
 use strict;
 use warnings;
 
+BEGIN {
+    $Math::Bacovia::VERSION = '0.01';
+}
+
 use List::UtilsBy::XS qw();
 use Class::Multimethods qw();
 use Math::AnyNum qw();
@@ -26,7 +30,6 @@ our %HIERARCHY = (
                   'Math::Bacovia::Symbol'     => 8,
                  );
 
-use Math::Bacovia::Utils;
 use Math::Bacovia::Exp;
 use Math::Bacovia::Log;
 use Math::Bacovia::Power;
@@ -37,13 +40,34 @@ use Math::Bacovia::Sum;
 use Math::Bacovia::Product;
 use Math::Bacovia::Symbol;
 
-our $VERSION = '0.01';
-
 our $MONE = 'Math::Bacovia::Number'->new(MONE);
 our $ZERO = 'Math::Bacovia::Number'->new(ZERO);
 our $ONE  = 'Math::Bacovia::Number'->new(ONE);
 our $TWO  = 'Math::Bacovia::Number'->new(ONE + ONE);
 our $HALF = 'Math::Bacovia::Number'->new(ONE / (ONE + ONE));
+
+sub _check_type ($) {
+    my ($ref) = @_;
+
+    if (my $r = ref($$ref)) {
+        if ($r eq 'Math::AnyNum') {
+            $$ref = 'Math::Bacovia::Number'->new($$ref);
+        }
+        elsif (UNIVERSAL::isa($r, 'Math::Bacovia')) {
+            ## ok
+        }
+        else {
+            $$ref = 'Math::Bacovia::Number'->new($$ref);
+        }
+    }
+    elsif (defined($$ref)) {
+        $$ref = 'Math::Bacovia::Number'->new($$ref);
+    }
+    else {
+        require Carp;
+        Carp::croak("[ERROR] Undefined value!");
+    }
+}
 
 use overload
   '""' => sub { $_[0]->stringify },
@@ -52,7 +76,7 @@ use overload
   '==' => sub {
     my ($x, $y) = @_;
 
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$y);
 
     $x->eq($y);
   },
@@ -60,7 +84,7 @@ use overload
   '!=' => sub {
     my ($x, $y) = @_;
 
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$y);
 
     !($x->eq($y));
   },
@@ -71,40 +95,40 @@ use overload
   '+' => sub {
     my ($x, $y, $s) = @_;
 
-    Math::Bacovia::Utils::check_type(\$x);
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$x);
+    Math::Bacovia::_check_type(\$y);
 
     $s ? $y->add($x) : $x->add($y);
   },
   '-' => sub {
     my ($x, $y, $s) = @_;
 
-    Math::Bacovia::Utils::check_type(\$x);
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$x);
+    Math::Bacovia::_check_type(\$y);
 
     $s ? $y->sub($x) : $x->sub($y);
   },
   '*' => sub {
     my ($x, $y, $s) = @_;
 
-    Math::Bacovia::Utils::check_type(\$x);
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$x);
+    Math::Bacovia::_check_type(\$y);
 
     $s ? $y->mul($x) : $x->mul($y);
   },
   '/' => sub {
     my ($x, $y, $s) = @_;
 
-    Math::Bacovia::Utils::check_type(\$x);
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$x);
+    Math::Bacovia::_check_type(\$y);
 
     $s ? $y->div($x) : $x->div($y);
   },
   '**' => sub {
     my ($x, $y, $s) = @_;
 
-    Math::Bacovia::Utils::check_type(\$x);
-    Math::Bacovia::Utils::check_type(\$y);
+    Math::Bacovia::_check_type(\$x);
+    Math::Bacovia::_check_type(\$y);
 
     $s ? $y->pow($x) : $x->pow($y);
   },
