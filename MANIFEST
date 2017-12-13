@@ -11,6 +11,7 @@ examples/floor_function.pl
 examples/fractions.pl
 examples/generalized_fibonacci.pl
 examples/log_factorial_asymptotic.pl
+examples/quadratic_polynomial_in_terms_of_its_zeros.pl
 examples/summation.pl
 examples/test.pl
 examples/trigonometry.pl

@@ -6,6 +6,7 @@ Math::Bacovia::Difference - Represents a symbolic difference.
 
 =head1 SYNOPSIS
 
+    use 5.014;
     use Math::Bacovia qw(Difference Symbol);
 
     my $f = Difference(Symbol('a'), Symbol('b'));
@@ -64,7 +65,7 @@ Additive inverse of C<x>, using the identity:
     $x == $y
     $x->eq($y)
 
-Return a true value when C<x> and C<y> are sybolically equal.
+Return a true value when C<x> and C<y> are symbolically equal.
 
 =head1 SPECIAL METHODS
 

@@ -2,22 +2,105 @@
 
 =head1 NAME
 
-Math::Bacovia::Difference - Represents a symbolic difference.
+Math::Bacovia::Exp - Represents the natural exponentiation of a symbolic value.
 
 =head1 SYNOPSIS
 
-    use Math::Bacovia qw(Difference Symbol);
+    use 5.014;
+    use Math::Bacovia qw(Exp Symbol);
 
-    my $f = Difference(Symbol('a'), Symbol('b'));
-    my $g = Difference(Symbol('x'), Symbol('y'));
+    my $f = Exp(Symbol('a'));
+    my $g = Exp(Symbol('b'));
 
-    say (($f + $g)->pretty);    #=> ((a + x) - (b + y))
+    say (($f * $g)->pretty);    #=> exp(a + b)
 
 =head1 METHODS
 
-This section describes the methods provided by the B<Math::Bacovia::Difference> module.
+This section describes the methods provided by the B<Math::Bacovia::Exp> module.
 
-=head2 add
+=head2 new
+
+    my $obj = Math::Bacovia::Exp->new($value);
+
+Constructs and returns a new B<Math::Bacovia::Exp> object.
+
+=head2 mul
+
+    $x * $y
+    $x->mul($y)
+
+Product of C<x> and C<y>, using the identity:
+
+    exp(x) * exp(y) = exp(x + y)
+
+=head2 div
+
+    $x / $y
+    $x->div($y)
+
+Division of C<x> by C<x>, using the identity:
+
+    exp(x) / exp(y) = exp(x - y)
+
+=head2 pow
+
+    $x ** $y
+    $x->pow($y)
+
+C<x> to the power C<y>, using the identity:
+
+    exp(x)^y = exp(x * y)
+
+=head2 inv
+
+    -$x
+    $x->inv
+
+Multiplicative inverse of C<x>, using the identity:
+
+    1/exp(x) = exp(-x)
+
+=head2 eq
+
+    $x == $y
+    $x->eq($y)
+
+Return a true value when C<x> and C<y> are symbolically equal.
+
+=head1 SPECIAL METHODS
+
+This section describes the special methods provided by the B<Math::Bacovia::Exp> module.
+
+=head2 inside
+
+    my ($value) = $obj->inside;
+
+Returns the internal value of the self-object.
+
+=head2 alternatives
+
+    my @alt = $obj->alternatives;
+    my @alt = $obj->alternatives(full => 1);
+
+This method uses common mathematical identities to create symbolically equivalent expressions from the self-expression.
+
+=head2 pretty
+
+    my $str = $obj->pretty;
+
+Returns a human-readable stringification of the self-expression.
+
+=head2 stringify
+
+    my $str = $obj->stringify;
+
+Returns a stringification of the self-expression.
+
+=head2 numeric
+
+    my $num = $obj->numeric;
+
+Evaluates the self-expression numerically and returns a L<Math::AnyNum> object.
 
 =head1 SEE ALSO
 

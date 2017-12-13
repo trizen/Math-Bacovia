@@ -1,5 +1,5 @@
 {
-   "abstract" : "Symbolic math library.",
+   "abstract" : "Symbolic math library with support for alternative representations.",
    "author" : [
       "Daniel Șuteu <trizen@protonmail.com>"
    ],
