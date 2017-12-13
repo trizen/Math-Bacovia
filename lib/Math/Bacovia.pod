@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Math::Bacovia - Symbolic math library.
+Math::Bacovia - Symbolic math library with support for alternative representations.
 
 =head1 VERSION
 
@@ -10,7 +10,7 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-B<Math::Bacovia> is an experimental symbolic math library, including support for numerical evaluation and expression simplification.
+B<Math::Bacovia> is an experimental symbolic math library, with support for alternative representations, simplification of expressions and numerical evaluation.
 
     use utf8;
     use 5.014;
@@ -343,10 +343,18 @@ Output:
 The simplification of an expression is done by generating the list of
 alternative representations for it, then selecting the shortest expression from this list.
 
-The returned simplified expression may not always be optimal. In some cases, calling the C<simple()>
+This approach works pretty well even on relatively complex expressions, such as:
+
+    say Log(Symbol('x'))->cosh->simple->pretty;
+
+Output:
+
+    ((1 + x^2)/(2 * x))
+
+However, the returned simplified expression is not guaranteed to be "optimal". In some cases, calling the C<simple()>
 method on an already simplified expression, the simplified expression may get simplified even further:
 
-    my $expr = $x->simple(full => 1)->simple(full => 1);
+    $x->simple(full => 1)->simple(full => 1);
 
 B<WARNING:> On long expressions, this process may take a very long time and use lots of memory.
 
