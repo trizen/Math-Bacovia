@@ -64,55 +64,49 @@ The types supported by this library are described bellow:
 
 Represents a symbolic value. Optionally, it can have a numeric value.
 
-See also: L<Math::Bacovia::Symbol>.
-
 =head2 Fraction(numerator, denominator)
 
 Represents a symbolic fraction.
 
-See also: L<Math::Bacovia::Fraction>.
-
 =head2 Difference(minuend, subtrahend)
 
-Represents a symbolic subtraction.
-
-See also: L<Math::Bacovia::Difference>.
+Represents a symbolic difference.
 
 =head2 Power(base, power)
 
 Represents a symbolic exponentiation in a symbolic base.
 
-See also: L<Math::Bacovia::Power>.
-
 =head2 Log(x)
 
 Represents the natural logarithm of a symbolic value.
-
-See also: L<Math::Bacovia::Log>.
 
 =head2 Exp(x)
 
 Represents the natural exponentiation of a symbolic value.
 
-See also: L<Math::Bacovia::Exp>.
-
 =head2 Sum(a, b, c, ...)
 
 Represents a summation of an arbitrary (finite) number of symbolic values.
 
-See also: L<Math::Bacovia::Sum>.
-
 =head2 Product(a, b, c, ...)
 
 Represents a product of an arbitrary (finite) number of symbolic values.
-
-See also: L<Math::Bacovia::Product>.
 
 =head1 EXPORT
 
 Importing a name from B<Math::Bacovia> can be done using the following syntax:
 
     use Math::Bacovia qw(Fraction);     # imports the Fraction() function
+
+By specifying the B<:all> special keyword, B<Math::Bacovia> will export all the provided functions and constants.
+
+    use Math::Bacovia qw(:all);
+
+Nothing is exported by default.
+
+=head1 CONSTANTS
+
+=head2 i / e / pi / tau
 
 B<Math::Bacovia> also provides a small list of useful constants which can be imported:
 
@@ -123,15 +117,9 @@ B<Math::Bacovia> also provides a small list of useful constants which can be imp
 
 For importing a constant, the same syntax can be used as in importing a function:
 
-    use Math::Bacovia qw(i pi);
+    use Math::Bacovia qw(i tau);
 
-By specifying the B<:all> special keyword, B<Math::Bacovia> will export all the provided functions and constants.
-
-    use Math::Bacovia qw(:all);
-
-Nothing is exported by default.
-
-=head1 MATHEMATICAL OPERATIONS
+=head1 METHODS
 
 This section description of the special methods provided by Math::Bacovia.
 
@@ -300,7 +288,7 @@ Cosecant, hyperbolic cosecant, inverse cosecant and inverse hyperbolic cosecant.
 
 The arctangent of the quotient of its arguments (i.e.: C<atan(x/y)>).
 
-=head1 TYPE METHODS
+=head1 SPECIAL METHODS
 
 Each type provided by B<Math::Bacovia> includes the same set of methods, defined bellow:
 
@@ -336,17 +324,15 @@ Output:
     Exp(Product(Log(3), 5))
     243
 
-On long and complex expressions, the number of alternative representations grows exponentially.
-
-In combination with the B<full> option (set to a true value), the returned list may contain thousands or even millions of alternative expressions.
-
-B<WARNING:> On long expressions, this process may take a very long time and use lots of memory.
+B<WARNING:> The number of alternative representations grows exponentially! For non-trivial expressions,
+this process may take a very long time and use lots of memory. In combination with the B<full> option
+(set to a true value), the returned list may contain hundreds of even thousands of alternative representations.
 
 =head2 simple
 
     $x->simple(%opt)
 
-Returns a simplification of the self-expression.
+Returns a simplification of the self-expression, taking the same options as the C<alternatives()> method.
 
     say Exp(Log(Log(Exp(Exp(Log(Symbol('x')))))))->simple;
 
@@ -354,11 +340,11 @@ Output:
 
     Symbol("x")
 
-It takes the same options as the C<alternatives()> method.
+The simplification of an expression is done by generating the list of
+alternative representations for it, then selecting the shortest expression from this list.
 
-In the current implementation, the simplification of expressions is done by generating all the alternative representations and selecting the shortest expression from this list.
-
-The simplified expression may not always be optimal. In some cases, calling the C<simple()> method on an already simplified expression, the expression may get simplified even further:
+The returned simplified expression may not always be optimal. In some cases, calling the C<simple()>
+method on an already simplified expression, the simplified expression may get simplified even further:
 
     my $expr = $x->simple(full => 1)->simple(full => 1);
 
@@ -368,7 +354,7 @@ B<WARNING:> On long expressions, this process may take a very long time and use 
 
     $x->expand(%opt)
 
-Returns an expanded version of the self-expression.
+Returns an expanded version of the self-expression, taking the same options as the C<alternatives()> method.
 
     say Power(Fraction(5, 7), Fraction(1, 3))->expand(full => 1);
 
@@ -376,9 +362,8 @@ Output:
 
     Exp(Product(Log(Fraction(5, 7)), Fraction(1, 3)))
 
-It takes the same options as the C<alternatives()> method.
-
-In the current implementation, the expansion of expressions is done by generating all the alternative representations and selecting the longest expression from this list.
+The expansion of an expression is done by generating the list of
+alternative representations for it, then selecting the longest expression from this list.
 
 B<WARNING:> On long expressions, this process may take a very long time and use lots of memory.
 
@@ -393,7 +378,7 @@ Example:
     my $x = Symbol('x', 13);
     my $expr = ($x**2 - $x + 41);
 
-    say $expr->numeric;     #=> 197
+    say $expr->numeric;   #=> 197
 
 =head2 pretty
 
@@ -403,7 +388,31 @@ Returns a human-readable stringification of the self-expression.
 
 Example:
 
-    say Power(3, Log(Fraction(1, 2)))->pretty;      #=> 3^log(1/2)
+    say Power(3, Log(Fraction(1, 2)))->pretty;    #=> 3^log(1/2)
+
+=head1 SEE ALSO
+
+For a detailed documentation of each class, please see:
+
+=over 4
+
+=item * L<Math::Bacovia::Fraction>
+
+=item * L<Math::Bacovia::Difference>
+
+=item * L<Math::Bacovia::Power>
+
+=item * L<Math::Bacovia::Log>
+
+=item * L<Math::Bacovia::Exp>
+
+=item * L<Math::Bacovia::Sum>
+
+=item * L<Math::Bacovia::Product>
+
+=item * L<Math::Bacovia::Symbol>
+
+=back
 
 =head1 AUTHOR
 
@@ -419,7 +428,6 @@ I will be notified, and then you'll automatically be notified of progress on you
 You can find documentation for this module with the perldoc command.
 
     perldoc Math::Bacovia
-
 
 You can also look for information at:
 

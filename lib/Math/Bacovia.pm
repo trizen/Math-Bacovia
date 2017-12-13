@@ -12,12 +12,6 @@ use List::UtilsBy::XS qw();
 use Class::Multimethods qw();
 use Math::AnyNum qw();
 
-use constant {
-              MONE => 'Math::AnyNum'->mone,
-              ZERO => 'Math::AnyNum'->zero,
-              ONE  => 'Math::AnyNum'->one,
-             };
-
 our %HIERARCHY = (
                   'Math::Bacovia::Number'     => 0,
                   'Math::Bacovia::Difference' => 1,
@@ -40,11 +34,19 @@ use Math::Bacovia::Sum;
 use Math::Bacovia::Product;
 use Math::Bacovia::Symbol;
 
-our $MONE = 'Math::Bacovia::Number'->new(MONE);
-our $ZERO = 'Math::Bacovia::Number'->new(ZERO);
-our $ONE  = 'Math::Bacovia::Number'->new(ONE);
-our $TWO  = 'Math::Bacovia::Number'->new(ONE + ONE);
-our $HALF = 'Math::Bacovia::Number'->new(ONE / (ONE + ONE));
+our ($MONE, $ZERO, $ONE, $TWO, $HALF);
+
+{
+    my $mone = 'Math::AnyNum'->mone;
+    my $zero = 'Math::AnyNum'->zero;
+    my $one  = 'Math::AnyNum'->one;
+
+    $MONE = 'Math::Bacovia::Number'->new($mone);
+    $ZERO = 'Math::Bacovia::Number'->new($zero);
+    $ONE  = 'Math::Bacovia::Number'->new($one);
+    $TWO  = 'Math::Bacovia::Number'->new($one + $one);
+    $HALF = 'Math::Bacovia::Number'->new($one / ($one + $one));
+};
 
 sub _check_type ($) {
     my ($ref) = @_;
@@ -154,8 +156,20 @@ use overload
 ## Import/export
 #
 
-sub i() {
-    state $x = 'Math::Bacovia::Number'->new('Math::AnyNum'->i);
+sub i () {
+    'Math::Bacovia::Number'->new('Math::AnyNum'->i);
+}
+
+sub pi () {
+    'Math::Bacovia::Log'->new($MONE) * -i;
+}
+
+sub tau () {
+    'Math::Bacovia::Log'->new($MONE) * -(i + i);
+}
+
+sub e () {
+    'Math::Bacovia::Exp'->new($ONE);
 }
 
 my %exported_functions = (
@@ -171,17 +185,11 @@ my %exported_functions = (
                          );
 
 my %exported_constants = (
-    i  => \&i,
-    pi => sub {
-        'Math::Bacovia::Log'->new($MONE) * -i;
-    },
-    tau => sub {
-        'Math::Bacovia::Log'->new($MONE) * -(i + i);
-    },
-    e => sub {
-        'Math::Bacovia::Exp'->new($ONE);
-    },
-);
+                          i   => \&i,
+                          pi  => \&pi,
+                          tau => \&tau,
+                          e   => \&e,
+                         );
 
 sub import {
     shift;

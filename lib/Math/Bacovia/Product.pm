@@ -77,7 +77,7 @@ sub inv {
 sub numeric {
     my ($x) = @_;
     $x->{_num} //= do {
-        my $prod = Math::Bacovia::ONE;
+        my $prod = $Math::Bacovia::ONE->{value};
         foreach my $value (@{$x->{values}}) {
             $prod *= $value->numeric;
         }

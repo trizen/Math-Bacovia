@@ -82,7 +82,7 @@ sub neg {
 sub numeric {
     my ($x) = @_;
     $x->{_num} //= do {
-        my $sum = Math::Bacovia::ZERO;
+        my $sum = $Math::Bacovia::ZERO->{value};
         foreach my $value (@{$x->{values}}) {
             $sum += $value->numeric;
         }

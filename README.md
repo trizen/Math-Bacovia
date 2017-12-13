@@ -146,11 +146,9 @@ Exp(Product(Log(3), 5))
 243
 ```
 
-On long and complex expressions, the number of alternative representations grows exponentially.
-
-In combination with the `full` option (set to a true value), the returned list may contain thousands or even millions of alternative expressions.
-
-**NOTE:** This process may use many gigabytes of memory.
+**WARNING:** The number of alternative representations grows exponentially! For non-trivial expressions,
+this process may take a very long time and use lots of memory. In combination with the B<full> option
+(set to a true value), the returned list may contain hundreds of even thousands of alternative representations.
 
 #### # `simple()`
 
@@ -211,9 +209,9 @@ say $expr->numeric;     #=> 197
 
 Math::Bacovia requires the following modules:
 
-* [Math::AnyNum](https://metacpan.org/release/Math-AnyNum)
+* [Math::AnyNum](https://metacpan.org/pod/Math::AnyNum)
 * [Set::Product::XS](https://metacpan.org/pod/Set::Product::XS)
-* [List::UtilsBy::XS](https://metacpan.org/release/List-UtilsBy-XS)
+* [List::UtilsBy::XS](https://metacpan.org/pod/List::UtilsBy::XS)
 
 # INSTALLATION
 

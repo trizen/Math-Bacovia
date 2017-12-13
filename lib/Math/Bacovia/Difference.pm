@@ -114,6 +114,10 @@ Class::Multimethods::multimethod mul => (__PACKAGE__, 'Math::Bacovia::Fraction')
     __PACKAGE__->new($x->{minuend} * $y, $x->{subtrahend} * $y);
 };
 
+#
+## -(a-b) = b-a
+#
+
 sub neg {
     my ($x) = @_;
     $x->{_neg} //= __PACKAGE__->new($x->{subtrahend}, $x->{minuend});
