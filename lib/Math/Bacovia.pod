@@ -416,6 +416,8 @@ For a detailed documentation of each class, please see:
 
 =item * L<Math::Bacovia::Product>
 
+=item * L<Math::Bacovia::Number>
+
 =item * L<Math::Bacovia::Symbol>
 
 =back
