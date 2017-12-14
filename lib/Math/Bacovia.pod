@@ -328,7 +328,7 @@ Output:
 
 B<WARNING:> The number of alternative representations grows exponentially! For non-trivial expressions,
 this process may take a very long time and use lots of memory. In combination with the B<full> option
-(set to a true value), the returned list may contain hundreds of even thousands of alternative representations.
+(set to a true value), the returned list may contain hundreds or even thousands of alternative representations.
 
 =head2 simple
 
