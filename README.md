@@ -5,9 +5,7 @@ Math::Bacovia is a symbolic math library, with support for numerical evaluation 
 # EXAMPLE
 
 ```perl
-use utf8;
 use 5.014;
-
 use Math::Bacovia qw(:all);
 
 my $x = Symbol('x');

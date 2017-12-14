@@ -12,9 +12,7 @@ Version 0.01
 
 B<Math::Bacovia> is an experimental symbolic math library, with support for alternative representations, simplification of expressions and numerical evaluation.
 
-    use utf8;
     use 5.014;
-
     use Math::Bacovia qw(:all);
 
     my $x = Symbol('x');
@@ -349,11 +347,7 @@ alternative representations for it, then selecting the shortest expression from 
 
 This approach works pretty well even on relatively complex expressions, such as:
 
-    say Log(Symbol('x'))->cosh->simple->pretty;
-
-Output:
-
-    ((1 + x^2)/(2 * x))
+    say Log(Symbol('x'))->cosh->simple->pretty;     #=> ((1 + x^2)/(2 * x))
 
 However, the returned simplified expression is not guaranteed to be "optimal". In some cases, calling the C<simple()>
 method on an already simplified expression, the simplified expression may get simplified even further:
