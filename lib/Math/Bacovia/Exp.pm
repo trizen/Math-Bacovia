@@ -34,10 +34,10 @@ Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
     __PACKAGE__->new($x->{value} - $y->{value});
 };
 
-Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
-    my ($x, $y) = @_;
-    __PACKAGE__->new($x->{value} * $y);
-};
+#~ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
+    #~ my ($x, $y) = @_;
+    #~ __PACKAGE__->new($x->{value} * $y);
+#~ };
 
 sub inv {
     my ($x) = @_;

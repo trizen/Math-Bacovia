@@ -60,10 +60,10 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia') => sub {
     __PACKAGE__->new(@{$x->{values}}, $y->inv);
 };
 
-Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
-    my ($x, $y) = @_;
-    __PACKAGE__->new(map { $_**$y } @{$x->{values}});
-};
+#~ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
+    #~ my ($x, $y) = @_;
+    #~ __PACKAGE__->new(map { $_**$y } @{$x->{values}});
+#~ };
 
 sub inv {
     my ($x) = @_;

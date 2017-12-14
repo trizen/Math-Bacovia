@@ -31,7 +31,7 @@ Constructs and returns a new B<Math::Bacovia::Difference> object.
 
 Addition of C<x> and C<y>, using the identity:
 
-    (a-b) + (x-y) = (a+x) - (b+y)
+    (a-b) + (c-d) = (a+c) - (b+d)
 
 =head2 sub
 
@@ -40,7 +40,7 @@ Addition of C<x> and C<y>, using the identity:
 
 Subtraction of C<y> from C<x>, using the identity:
 
-    (a-b) - (x-y) = (a+y) - (b+x)
+    (a-b) - (c-d) = (a+d) - (b+c)
 
 =head2 mul
 
@@ -49,7 +49,7 @@ Subtraction of C<y> from C<x>, using the identity:
 
 Multiplication of C<x> and C<y>, using the identity:
 
-    (a-b) * (x-y) = (a*x + b*y) - (b*x + a*y)
+    (a-b) * (c-d) = (a*c + b*d) - (b*c + a*d)
 
 =head2 neg
 
@@ -75,7 +75,7 @@ This section describes the special methods provided by the B<Math::Bacovia::Diff
 
     my ($minuend, $subtrahend) = $obj->inside;
 
-Returns the internal minuend and subtrahend of the self-object.
+Returns the internal values of the self-object.
 
 =head2 alternatives
 
@@ -108,9 +108,9 @@ The other parts of B<Math::Bacovia>:
 
 =over 4
 
-=item * L<Math::Bacovia::Fraction>
+=item * L<Math::Bacovia>
 
-=item * L<Math::Bacovia::Difference>
+=item * L<Math::Bacovia::Fraction>
 
 =item * L<Math::Bacovia::Power>
 
@@ -121,6 +121,8 @@ The other parts of B<Math::Bacovia>:
 =item * L<Math::Bacovia::Sum>
 
 =item * L<Math::Bacovia::Product>
+
+=item * L<Math::Bacovia::Number>
 
 =item * L<Math::Bacovia::Symbol>
 

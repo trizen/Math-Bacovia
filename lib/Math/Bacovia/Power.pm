@@ -37,10 +37,10 @@ sub inside {
 ## Operations
 #
 
-Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
-    my ($x, $y) = @_;
-    __PACKAGE__->new($x->{base}, $x->{power} * $y);
-};
+#~ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
+    #~ my ($x, $y) = @_;
+    #~ __PACKAGE__->new($x->{base}, $x->{power} * $y);
+#~ };
 
 sub inv {
     my ($x) = @_;

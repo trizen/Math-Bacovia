@@ -31,7 +31,7 @@ Constructs and returns a new B<Math::Bacovia::Exp> object.
 
 Product of C<x> and C<y>, using the identity:
 
-    exp(x) * exp(y) = exp(x + y)
+    exp(a) * exp(b) = exp(a + b)
 
 =head2 div
 
@@ -40,16 +40,7 @@ Product of C<x> and C<y>, using the identity:
 
 Division of C<x> by C<x>, using the identity:
 
-    exp(x) / exp(y) = exp(x - y)
-
-=head2 pow
-
-    $x ** $y
-    $x->pow($y)
-
-C<x> to the power C<y>, using the identity:
-
-    exp(x)^y = exp(x * y)
+    exp(a) / exp(b) = exp(a - b)
 
 =head2 inv
 
@@ -58,7 +49,7 @@ C<x> to the power C<y>, using the identity:
 
 Multiplicative inverse of C<x>, using the identity:
 
-    1/exp(x) = exp(-x)
+    1/exp(a) = exp(-a)
 
 =head2 eq
 
@@ -108,6 +99,8 @@ The other parts of B<Math::Bacovia>:
 
 =over 4
 
+=item * L<Math::Bacovia>
+
 =item * L<Math::Bacovia::Fraction>
 
 =item * L<Math::Bacovia::Difference>
@@ -116,11 +109,11 @@ The other parts of B<Math::Bacovia>:
 
 =item * L<Math::Bacovia::Log>
 
-=item * L<Math::Bacovia::Exp>
-
 =item * L<Math::Bacovia::Sum>
 
 =item * L<Math::Bacovia::Product>
+
+=item * L<Math::Bacovia::Number>
 
 =item * L<Math::Bacovia::Symbol>
 

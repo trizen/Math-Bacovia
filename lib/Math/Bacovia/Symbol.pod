@@ -2,28 +2,73 @@
 
 =head1 NAME
 
-Math::Bacovia::Symbol - Represents a symbolic difference.
+Math::Bacovia::Symbol - Represents a symbolic value.
 
 =head1 SYNOPSIS
 
-    use Math::Bacovia qw(Difference Symbol);
+    use 5.014;
+    use Math::Bacovia qw(Symbol);
 
-    my $f = Difference(Symbol('a'), Symbol('b'));
-    my $g = Difference(Symbol('x'), Symbol('y'));
+    my $x = Symbol('x');
+    my $y = Symbol('y', 64);
 
-    say (($f + $g)->pretty);    #=> ((a + x) - (b + y))
+    say $y->numeric;           #=> 64
+    say $y->sqrt->numeric;     #=> 8
+    say (($x + $y)->pretty);   #=> (x + y)
 
 =head1 METHODS
 
 This section describes the methods provided by the B<Math::Bacovia::Symbol> module.
 
-=head2 add
+=head2 new
+
+    my $x = Math::Bacovia::Symbol->new("x");
+    my $y = Math::Bacovia::Symbol->new("y", $value);
+
+Constructs and returns a new B<Math::Bacovia::Symbol> object.
+
+=head2 eq
+
+    $x == $y
+    $x->eq($y)
+
+Return a true value when C<x> and C<y> are symbolically equal.
+
+=head1 SPECIAL METHODS
+
+This section describes the special methods provided by the B<Math::Bacovia::Symbol> module.
+
+=head2 inside
+
+    my ($value) = $obj->inside;
+
+Returns the internal value of the self-object.
+
+=head2 pretty
+
+    my $str = $obj->pretty;
+
+Returns a human-readable stringification of the self-expression.
+
+=head2 stringify
+
+    my $str = $obj->stringify;
+
+Returns a stringification of the self-expression.
+
+=head2 numeric
+
+    my $num = $obj->numeric;
+
+Evaluates the self-expression numerically and returns a L<Math::AnyNum> object.
 
 =head1 SEE ALSO
 
 The other parts of B<Math::Bacovia>:
 
 =over 4
+
+=item * L<Math::Bacovia>
 
 =item * L<Math::Bacovia::Fraction>
 
@@ -39,7 +84,7 @@ The other parts of B<Math::Bacovia>:
 
 =item * L<Math::Bacovia::Product>
 
-=item * L<Math::Bacovia::Symbol>
+=item * L<Math::Bacovia::Number>
 
 =back
 

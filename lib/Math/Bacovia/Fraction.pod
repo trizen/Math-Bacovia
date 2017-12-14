@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Math::Bacovia::Difference - Represents a symbolic difference.
+Math::Bacovia::Fraction - Represents a symbolic fraction.
 
 =head1 SYNOPSIS
 
@@ -31,7 +31,7 @@ Constructs and returns a new B<Math::Bacovia::Fraction> object.
 
 Sum of C<x> and C<y>, using the identity:
 
-    a/b + x/y = (a*y + x*b) / (b*y)
+    a/b + c/d = (a*d + c*b) / (b*d)
 
 =head2 sub
 
@@ -40,7 +40,7 @@ Sum of C<x> and C<y>, using the identity:
 
 Subtraction of C<y> from C<x>, using the identity:
 
-    a/b - x/y = (a*y - x*b) / (b*y)
+    a/b - c/d = (a*d - c*b) / (b*d)
 
 =head2 mul
 
@@ -49,7 +49,7 @@ Subtraction of C<y> from C<x>, using the identity:
 
 Product of C<x> and C<y>, using the identity:
 
-    (a/b) * (x/y) = (a*x) / (b*y)
+    (a/b) * (c/d) = (a*c) / (b*d)
 
 =head2 div
 
@@ -58,7 +58,7 @@ Product of C<x> and C<y>, using the identity:
 
 Division of C<x> by C<y>, using the identity:
 
-    (a/b) / (x/y) = (a*y) / (b*x)
+    (a/b) / (c/d) = (a*d) / (b*c)
 
 =head2 inv
 
@@ -77,13 +77,13 @@ Return a true value when C<x> and C<y> are symbolically equal.
 
 =head1 SPECIAL METHODS
 
-This section describes the special methods provided by the B<Math::Bacovia::Exp> module.
+This section describes the special methods provided by the B<Math::Bacovia::Fraction> module.
 
 =head2 inside
 
-    my ($value) = $obj->inside;
+    my ($numerator, $denominator) = $obj->inside;
 
-Returns the internal value of the self-object.
+Returns the internal values of the self-object.
 
 =head2 alternatives
 
@@ -116,7 +116,7 @@ The other parts of B<Math::Bacovia>:
 
 =over 4
 
-=item * L<Math::Bacovia::Fraction>
+=item * L<Math::Bacovia>
 
 =item * L<Math::Bacovia::Difference>
 
@@ -129,6 +129,8 @@ The other parts of B<Math::Bacovia>:
 =item * L<Math::Bacovia::Sum>
 
 =item * L<Math::Bacovia::Product>
+
+=item * L<Math::Bacovia::Number>
 
 =item * L<Math::Bacovia::Symbol>
 
