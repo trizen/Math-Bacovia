@@ -35,8 +35,8 @@ Class::Multimethods::multimethod div => (__PACKAGE__, __PACKAGE__) => sub {
 };
 
 #~ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
-    #~ my ($x, $y) = @_;
-    #~ __PACKAGE__->new($x->{value} * $y);
+#~ my ($x, $y) = @_;
+#~ __PACKAGE__->new($x->{value} * $y);
 #~ };
 
 sub inv {
@@ -114,6 +114,11 @@ sub alternatives {
                 if (ref($o) eq 'Math::Bacovia::Sum') {
                     push @alt, 'Math::Bacovia::Product'->new(map { __PACKAGE__->new($_) } @{$o->{values}});
                 }
+
+                # Identity: exp(a/b) = exp(a)^(1/b)
+                #~ if (ref($o) eq 'Math::Bacovia::Fraction') {
+                #~ push @alt, (__PACKAGE__->new($o->{num}) ** $o->{den}->inv)->alternatives(%opt);
+                #~ }
 
 #<<<
                 # Identity: exp(a - b) = exp(a) / exp(b)

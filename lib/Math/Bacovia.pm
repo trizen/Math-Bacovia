@@ -388,7 +388,7 @@ sub asin {
 sub sinh {
     my ($x) = @_;
     $x->{_sinh} //=
-      'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $MONE), ($TWO * 'Math::Bacovia::Exp'->new($x)));
+      'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) - $ONE), ($TWO * 'Math::Bacovia::Exp'->new($x)));
 }
 
 # asinh(x) = log(sqrt(x^2 + 1) + x)
@@ -404,10 +404,13 @@ sub cos {
       'Math::Bacovia::Fraction'->new('Math::Bacovia::Exp'->new(-i * $x) + 'Math::Bacovia::Exp'->new(i * $x), $TWO);
 }
 
-# acos(x) = π/2 + i log(i x + &sqrt(1 - x^2))
+# acos(x) = π/2 + i log(i x + sqrt(1 - x^2))
+# acos(x) = -2*i*log(i*sqrt((1 - x)/2) + sqrt((1 + x)/2))
 sub acos {
     my ($x) = @_;
-    $x->{_acos} //= 'Math::Bacovia::Log'->new(i) * -i + i * 'Math::Bacovia::Log'->new(i * $x + &sqrt($ONE - $x**$TWO));
+
+    #$x->{_acos} //= 'Math::Bacovia::Log'->new(i) * -i + i * 'Math::Bacovia::Log'->new(i * $x + &sqrt($ONE - $x**$TWO));
+    $x->{_acos} //= -i * $TWO * 'Math::Bacovia::Log'->new(&sqrt(($ONE - $x) / $TWO) * i + &sqrt(($ONE + $x) / $TWO));
 }
 
 # cosh(x) = (exp(2x) + 1) / (2*exp(x))
@@ -422,7 +425,7 @@ sub cosh {
 # acosh(x) = log(x + sqrt(x - 1) * sqrt(x + 1))
 sub acosh {
     my ($x) = @_;
-    $x->{_acosh} //= 'Math::Bacovia::Log'->new($x + &sqrt($x + $MONE) * &sqrt($x + $ONE));
+    $x->{_acosh} //= 'Math::Bacovia::Log'->new($x + &sqrt($x - $ONE) * &sqrt($x + $ONE));
 }
 
 # tan(x) = -i + (2*i)/(1 + exp(2*i*x))
@@ -431,12 +434,14 @@ sub tan {
     $x->{_tan} //= -i + 'Math::Bacovia::Fraction'->new($TWO * i, $ONE + 'Math::Bacovia::Exp'->new($TWO * i * $x));
 }
 
-# atan(x) = i/2 * (log(1 - i*x) - log(1 + i*x))
+# atan(x) = i * (log(1 - i*x) - log(1 + i*x)) / 2
+# atan(x) = log(sqrt(1 - i*x) / sqrt(1 + i*x)) * i
 sub atan {
     my ($x) = @_;
 
 #<<<
-    $x->{_atan} //= i * 'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE - i * $x) - 'Math::Bacovia::Log'->new($ONE + i * $x), $TWO);
+    #$x->{_atan} //= i * 'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE - i * $x) - 'Math::Bacovia::Log'->new($ONE + i * $x), $TWO);
+    $x->{_atan} //= 'Math::Bacovia::Log'->new('Math::Bacovia::Fraction'->new(&sqrt($ONE - i*$x), &sqrt($ONE + i*$x))) * i;
 #>>>
 }
 
@@ -449,21 +454,28 @@ sub atan2 {
 # tanh(x) = (exp(2x) - 1) / (exp(2x) + 1)
 sub tanh {
     my ($x) = @_;
-    $x->{_tanh} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $MONE),
+    $x->{_tanh} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) - $ONE),
                                                    ('Math::Bacovia::Exp'->new($TWO * $x) + $ONE));
 }
 
-# atanh(x) = (log(1 + x) - log(1 - x)) / 2
+# atanh(x) = (log(1 + x) - log(1 - x)) / 2 = log(sqrt(1+x) / sqrt(1-x))
 sub atanh {
     my ($x) = @_;
     $x->{_atanh} //=
-      'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE + $x) - 'Math::Bacovia::Log'->new($ONE - $x), $TWO);
+
+      #'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE + $x) - 'Math::Bacovia::Log'->new($ONE - $x), $TWO);
+      'Math::Bacovia::Log'->new(
+                                'Math::Bacovia::Fraction'->new(
+                                                               'Math::Bacovia::Power'->new($ONE + $x, $HALF),
+                                                               'Math::Bacovia::Power'->new($ONE - $x, $HALF)
+                                                              )
+                               );
 }
 
-# cot(x) = i + (2*i)/(-1 + exp(2*i*x))
+# cot(x) = i + (2*i)/(exp(2*i*x) - 1)
 sub cot {
     my ($x) = @_;
-    $x->{_cot} //= i + 'Math::Bacovia::Fraction'->new($TWO * i, $MONE + 'Math::Bacovia::Exp'->new($TWO * i * $x));
+    $x->{_cot} //= i + 'Math::Bacovia::Fraction'->new($TWO * i, 'Math::Bacovia::Exp'->new($TWO * i * $x) - $ONE);
 }
 
 # acot(x) = atan(1/x)
@@ -476,7 +488,7 @@ sub acot {
 sub coth {
     my ($x) = @_;
     $x->{_coth} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $ONE),
-                                                   ('Math::Bacovia::Exp'->new($TWO * $x) + $MONE));
+                                                   ('Math::Bacovia::Exp'->new($TWO * $x) - $ONE));
 }
 
 # acoth(x) = atanh(1/x)

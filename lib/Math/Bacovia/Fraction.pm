@@ -217,12 +217,12 @@ sub alternatives {
                 }
 
                 # Identity: a^x / b^x = (a/b)^x
-                if (    ref($num) eq 'Math::Bacovia::Power'
-                    and ref($den) eq 'Math::Bacovia::Power'
-                    and ref($num->{power}) eq ref($den->{power})
-                    and $num->{power}->eq($den->{power})) {
-                    push @alt, 'Math::Bacovia::Power'->new($num->{base} / $den->{base}, $num->{power});
-                }
+                #~ if (    ref($num) eq 'Math::Bacovia::Power'
+                #~ and ref($den) eq 'Math::Bacovia::Power'
+                #~ and ref($num->{power}) eq ref($den->{power})
+                #~ and $num->{power}->eq($den->{power})) {
+                #~ push @alt, 'Math::Bacovia::Power'->new($num->{base} / $den->{base}, $num->{power});
+                #~ }
 
                 # Identity: a^x / a = a^(x-1)
                 if (    ref($num) eq 'Math::Bacovia::Power'

@@ -38,8 +38,8 @@ sub inside {
 #
 
 #~ Class::Multimethods::multimethod pow => (__PACKAGE__, 'Math::Bacovia') => sub {
-    #~ my ($x, $y) = @_;
-    #~ __PACKAGE__->new($x->{base}, $x->{power} * $y);
+#~ my ($x, $y) = @_;
+#~ __PACKAGE__->new($x->{base}, $x->{power} * $y);
 #~ };
 
 sub inv {
@@ -174,9 +174,9 @@ sub alternatives {
                 }
 
                 # Identity: (a/b)^x = a^x / b^x
-                if (ref($x) eq 'Math::Bacovia::Fraction') {
-                    push @alt, $x->{num}**$y / $x->{den}**$y;
-                }
+                #~ if (ref($x) eq 'Math::Bacovia::Fraction') {
+                #~ push @alt, $x->{num}**$y / $x->{den}**$y;
+                #~ }
 
                 # Identity: x^2 = x*x
                 #~ if ($y == 2) {
@@ -195,9 +195,9 @@ sub alternatives {
                 }
 
                 # Identity: exp(x)^y = exp(y*x)
-                if (ref($x) eq 'Math::Bacovia::Exp') {
-                    push @alt, 'Math::Bacovia::Exp'->new($x->{value} * $y);
-                }
+                #~ if (ref($x) eq 'Math::Bacovia::Exp') {
+                #~ push @alt, 'Math::Bacovia::Exp'->new($x->{value} * $y);
+                #~ }
 
                 # Identity: x^(y/log(x)) = exp(y)
                 if (    ref($y) eq 'Math::Bacovia::Fraction'

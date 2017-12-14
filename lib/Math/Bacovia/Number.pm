@@ -94,12 +94,12 @@ Class::Multimethods::multimethod div => (__PACKAGE__, 'Math::Bacovia::Fraction')
 
 sub inv {
     my ($x) = @_;
-    $x->{_inv} //= __PACKAGE__->new(1 / $x->{value});
+    $x->{_inv} //= __PACKAGE__->new($x->{value}->inv);
 }
 
 sub neg {
     my ($x) = @_;
-    $x->{_neg} //= __PACKAGE__->new(-($x->{value}));
+    $x->{_neg} //= __PACKAGE__->new($x->{value}->neg);
 }
 
 #

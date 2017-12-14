@@ -101,9 +101,9 @@ sub alternatives {
                 }
 
                 # Identity: log(a^b) = log(a) * b
-                if (ref($o) eq 'Math::Bacovia::Power') {
-                    push @alt, __PACKAGE__->new($o->{base}) * $o->{power};
-                }
+                #~ if (ref($o) eq 'Math::Bacovia::Power') {
+                #~ push @alt, __PACKAGE__->new($o->{base}) * $o->{power};
+                #~ }
             }
         }
 
