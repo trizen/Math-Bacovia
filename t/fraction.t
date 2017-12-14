@@ -1,12 +1,12 @@
-#!/usr/bin/perl
+#!perl -T
 
-use utf8;
-use 5.014;
-
+use 5.006;
+use strict;
+use warnings;
 use Test::More;
+
 plan tests => 12;
 
-use lib qw(../lib);
 use Math::Bacovia qw(Fraction Difference);
 
 is(1 + Fraction(3, 4), Fraction(7, 4));

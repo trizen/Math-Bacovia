@@ -1,14 +1,12 @@
-#!/usr/bin/perl
+#!perl -T
 
-# The floor function (for non-integers).
-
-use utf8;
-use 5.014;
-
+use 5.006;
+use strict;
+use warnings;
 use Test::More;
+
 plan tests => 15;
 
-use lib qw(../lib);
 use Math::Bacovia qw(:all);
 
 sub my_floor {
@@ -37,5 +35,3 @@ is(my_floor(Symbol('x', -123.12))->simple->numeric->round(-50), -124);
 
 my $f = my_floor(Symbol('x'))->simple->simple(full => 1);
 is($f->pretty, '((x - 0.5) + ((-0.5/log(-1)) * log(((1 - exp((2 * log(-1) * x)))/((exp((2 * log(-1) * x)) - 1) * exp((-2 * log(-1) * x)))))))');
-
-say "floor(x) = ", $f->pretty;

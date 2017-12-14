@@ -60,7 +60,11 @@ The types supported by this library are described bellow:
 
 #### # `Symbol(name, value=undef)`
 
-Represents a symbolic value. Optionally, it can have a numeric value.
+Represents a symbolic value. Optionally, it can have a numerical value (or any other value).
+
+#### # `Number(value)`
+
+Represents a numerical value.
 
 #### # `Fraction(numerator, denominator)`
 

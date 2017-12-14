@@ -1,14 +1,11 @@
-#!/usr/bin/perl
+#!perl -T
 
-# Trigonometric functions.
-
-use utf8;
-use 5.014;
-
+use 5.006;
+use strict;
+use warnings;
 use Test::More;
-plan tests => 98;
 
-use lib qw(../lib);
+plan tests => 101;
 
 use Math::AnyNum;
 use Math::Bacovia qw(:all);
@@ -18,9 +15,9 @@ my $y = Symbol('y', -43);
 my $z = Symbol('z', 1.5);
 my $k = Symbol('k', -0.5);
 
-say "cosh(log(x)) = ", Log($x)->cosh->simple->pretty;
-say "sinh(log(x)) = ", Log($x)->sinh->simple->pretty;
-say "tanh(log(x)) = ", Log($x)->tanh->simple->pretty;
+is(Log($x)->cosh->simple->pretty, '((1 + x^2)/(2 * x))');
+is(Log($x)->sinh->simple->pretty, '((-1 + x^2)/(2 * x))');
+is(Log($x)->tanh->simple->pretty, '((-1 + x^2)/(1 + x^2))');
 
 is(Log($x)->cosh->simple, Fraction(Sum(1, Power(Symbol("x", 43), 2)), Product(2, Symbol("x", 43))));
 

@@ -1,10 +1,11 @@
-#!/usr/bin/perl
+#!perl -T
 
-use 5.014;
-use lib qw(../lib);
-use Math::Bacovia qw(:all);
-
+use 5.006;
+use strict;
+use warnings;
 use Test::More;
+
+use Math::Bacovia qw(:all);
 
 plan tests => 15;
 

@@ -1,12 +1,12 @@
-#!/usr/bin/perl
+#!perl -T
 
-use utf8;
-use 5.014;
-
+use 5.006;
+use strict;
+use warnings;
 use Test::More;
+
 plan tests => 21;
 
-use lib qw(../lib);
 use Math::Bacovia qw(Fraction Log Exp Product Difference i);
 
 is(1 - Difference(3, 4), Difference(5, 3));
