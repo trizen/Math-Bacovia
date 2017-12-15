@@ -233,15 +233,14 @@ perldoc command.
 
 You can also look for information at:
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Math-Bacovia
+* MetaCPAN
+  - https://metacpan.org/pod/Math::Bacovia
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Math-Bacovia
+* AnnoCPAN, Annotated CPAN documentation
+  - http://annocpan.org/dist/Math-Bacovia
 
-    Search CPAN
-        http://search.cpan.org/dist/Math-Bacovia/
-
+* CPAN Ratings
+  - http://cpanratings.perl.org/d/Math-Bacovia
 
 # LICENSE AND COPYRIGHT
 
