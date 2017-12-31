@@ -24,7 +24,7 @@ sub new {
     $cache{$value->stringify} //= bless {value => $value}, $class;
 }
 
-sub inside {
+sub get {
     $_[0]->{value};
 }
 

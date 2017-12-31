@@ -27,13 +27,13 @@ sub new {
         $denominator = $Math::Bacovia::ONE;
     }
 
-    $cache{join(';', $numerator->stringify, $denominator->stringify)} //= bless {
-                                                                                 num => $numerator,
-                                                                                 den => $denominator,
-                                                                                }, $class;
+    $cache{join("\0", $numerator->stringify, $denominator->stringify)} //= bless {
+                                                                                  num => $numerator,
+                                                                                  den => $denominator,
+                                                                                 }, $class;
 }
 
-sub inside {
+sub get {
     my ($x) = @_;
     ($x->{num}, $x->{den});
 }
@@ -160,7 +160,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    $x->{_num} //= $x->{num}->numeric / $x->{den}->numeric;
+    $x->{num}->numeric / $x->{den}->numeric;
 }
 
 sub pretty {

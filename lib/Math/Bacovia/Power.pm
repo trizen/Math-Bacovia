@@ -22,13 +22,13 @@ sub new {
         $power = $Math::Bacovia::ONE;
     }
 
-    $cache{join(';', $base->stringify, $power->stringify)} //= bless {
-                                                                      base  => $base,
-                                                                      power => $power,
-                                                                     }, $class;
+    $cache{join("\0", $base->stringify, $power->stringify)} //= bless {
+                                                                       base  => $base,
+                                                                       power => $power,
+                                                                      }, $class;
 }
 
-sub inside {
+sub get {
     my ($x) = @_;
     ($x->{base}, $x->{power});
 }
@@ -94,7 +94,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    $x->{_num} //= ($x->{base}->numeric)**($x->{power}->numeric);
+    ($x->{base}->numeric)**($x->{power}->numeric);
 }
 
 sub pretty {

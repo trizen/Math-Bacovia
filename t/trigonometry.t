@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More;
 
-plan tests => 146;
+plan tests => 156;
 
 use Math::AnyNum;
 use Math::Bacovia qw(:all);
@@ -165,4 +165,17 @@ foreach my $method (
     is(Math::Bacovia::Number->new($n)->$method->simple->numeric->round(-50)->abs,            $n->$method->round(-50)->abs, "$method($n)");
     is(Math::Bacovia::Number->new($n)->$method->simple(full => 1)->numeric->round(-50)->abs, $n->$method->round(-50)->abs, "$method($n)");
 #>>>
+}
+
+{
+    my $x      = Symbol('x');
+    my @values = qw(0 3/4 4/3 15/8 12/5);
+
+    foreach my $n (1 .. 5) {
+
+        $x->set($n);    # change the numerical value of $x
+
+        is($x->stringify,                  qq{Symbol("x", $n)});
+        is($x->log->sinh->simple->numeric, shift(@values));
+    }
 }

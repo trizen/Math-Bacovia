@@ -16,7 +16,7 @@ sub new {
     $cache{$value->stringify} //= bless {value => $value}, $class;
 }
 
-sub inside {
+sub get {
     $_[0]->{value};
 }
 
@@ -58,7 +58,7 @@ Class::Multimethods::multimethod eq => (__PACKAGE__, '*') => sub {
 
 sub numeric {
     my ($x) = @_;
-    $x->{_num} //= CORE::log($x->{value}->numeric);
+    CORE::log($x->{value}->numeric);
 }
 
 sub pretty {

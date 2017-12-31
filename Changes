@@ -1,5 +1,11 @@
 Revision history for Math-Bacovia
 
+0.02    2017-12-31
+
+        - Renamed the method `inside()` to `get()`.
+        - Uncached the `numeric()` method.
+        - Added the `set()` method in `Math::Bacovia::Symbol`, which allows changing the numerical value of the self-object.
+
 0.01    2017-12-14
 
         - First release.
