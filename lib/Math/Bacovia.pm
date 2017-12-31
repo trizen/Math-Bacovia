@@ -66,8 +66,7 @@ sub _check_type ($) {
         $$ref = 'Math::Bacovia::Number'->new($$ref);
     }
     else {
-        require Carp;
-        Carp::croak("[ERROR] Undefined value!");
+        $$ref = $ZERO;
     }
 }
 
