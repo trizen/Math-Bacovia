@@ -6,7 +6,7 @@ Math::Bacovia - Symbolic math library with support for alternative representatio
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 

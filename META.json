@@ -37,7 +37,7 @@
    "provides" : {
       "Math::Bacovia" : {
          "file" : "lib/Math/Bacovia.pm",
-         "version" : "0.01"
+         "version" : "0.02"
       },
       "Math::Bacovia::Difference" : {
          "file" : "lib/Math/Bacovia/Difference.pm"
@@ -80,6 +80,6 @@
          "url" : "https://github.com/trizen/Math-Bacovia"
       }
    },
-   "version" : "0.01",
+   "version" : "0.02",
    "x_serialization_backend" : "JSON::PP version 2.97001"
 }
