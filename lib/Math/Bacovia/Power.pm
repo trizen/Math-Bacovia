@@ -8,8 +8,6 @@ use parent qw(Math::Bacovia);
 
 our $VERSION = $Math::Bacovia::VERSION;
 
-my %cache;
-
 sub new {
     my ($class, $base, $power) = @_;
 
@@ -22,10 +20,10 @@ sub new {
         $power = $Math::Bacovia::ONE;
     }
 
-    $cache{join("\0", $base->stringify, $power->stringify)} //= bless {
-                                                                       base  => $base,
-                                                                       power => $power,
-                                                                      }, $class;
+    bless {
+           base  => $base,
+           power => $power,
+          }, $class;
 }
 
 sub get {

@@ -8,8 +8,6 @@ use parent qw(Math::Bacovia);
 
 our $VERSION = $Math::Bacovia::VERSION;
 
-my %cache;
-
 sub new {
     my ($class, $value) = @_;
 
@@ -21,7 +19,7 @@ sub new {
         $value = 'Math::AnyNum'->new($value);
     }
 
-    $cache{$value->stringify} //= bless {value => $value}, $class;
+    bless {value => $value}, $class;
 }
 
 sub get {

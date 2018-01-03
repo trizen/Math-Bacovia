@@ -8,8 +8,6 @@ use parent qw(Math::Bacovia);
 
 our $VERSION = $Math::Bacovia::VERSION;
 
-my %cache;
-
 sub new {
     my ($class, $minuend, $subtrahend) = @_;
 
@@ -27,10 +25,10 @@ sub new {
         $subtrahend = $Math::Bacovia::ZERO;
     }
 
-    $cache{join("\0", $minuend->stringify, $subtrahend->stringify)} //= bless {
-                                                                               minuend    => $minuend,
-                                                                               subtrahend => $subtrahend,
-                                                                              }, $class;
+    bless {
+           minuend    => $minuend,
+           subtrahend => $subtrahend,
+          }, $class;
 }
 
 sub get {

@@ -8,8 +8,6 @@ use parent qw(Math::Bacovia);
 
 our $VERSION = $Math::Bacovia::VERSION;
 
-my %cache;
-
 sub new {
     my ($class, $numerator, $denominator) = @_;
 
@@ -27,10 +25,10 @@ sub new {
         $denominator = $Math::Bacovia::ONE;
     }
 
-    $cache{join("\0", $numerator->stringify, $denominator->stringify)} //= bless {
-                                                                                  num => $numerator,
-                                                                                  den => $denominator,
-                                                                                 }, $class;
+    bless {
+           num => $numerator,
+           den => $denominator,
+          }, $class;
 }
 
 sub get {
