@@ -1,6 +1,10 @@
 Revision history for Math-Bacovia
 
-0.02    2017-12-31
+0.03    2018-??-??
+
+        - Fixed the result of the `atan2(x, y)` function, when `x` and `y` are non-positive numbers.
+
+0.02    2018-01-02
 
         - Renamed the method `inside()` to `get()`.
         - Uncached the `numeric()` method.
