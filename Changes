@@ -1,9 +1,9 @@
 Revision history for Math-Bacovia
 
-0.03    2018-??-??
+0.03    2018-01-05
 
         - Fixed the result of the `atan2(x, y)` function, when `x` and `y` are non-positive numbers.
-        - Less caching.
+        - Less aggressive caching.
 
 0.02    2018-01-02
 

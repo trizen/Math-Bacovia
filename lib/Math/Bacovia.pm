@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 BEGIN {
-    $Math::Bacovia::VERSION = '0.02';
+    $Math::Bacovia::VERSION = '0.03';
 }
 
 use List::UtilsBy::XS qw();
