@@ -1,6 +1,6 @@
 Revision history for Math-Bacovia
 
-0.04    2018-??-??
+0.04    2018-10-01
 
         - Switched from `List::UtilsBy::XS` to `List::UtilsBy`, which has fewer build-time dependencies.
 
