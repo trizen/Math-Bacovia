@@ -13,7 +13,9 @@ my $builder = Module::Build->new(
      dist_version_from  => 'lib/Math/Bacovia.pm',
      release_status     => 'stable',
 
-    meta_merge => {
+     extra_manify_args => { utf8 => 1 },
+
+     meta_merge => {
                    resources => {
                                  bugtracker => "https://github.com/trizen/Math-Bacovia/issues",
                                  homepage   => "https://github.com/trizen/Math-Bacovia",
