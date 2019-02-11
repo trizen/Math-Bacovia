@@ -42,7 +42,6 @@ t/fibonacci.t
 t/fibonacci_2.t
 t/floor_function.t
 t/fraction.t
-t/manifest.t
 t/pod-coverage.t
 t/pod.t
 t/trigonometry.t
