@@ -1,4 +1,3 @@
-#!/usr/bin/perl
 
 use utf8;
 use 5.006;
@@ -9,10 +8,11 @@ use Module::Build;
 my $builder = Module::Build->new(
      module_name        => 'Math::Bacovia',
      license            => 'artistic_2',
-     dist_author        => q{Daniel Șuteu <trizen@protonmail.com>},
+     dist_author        => q<Daniel Șuteu <trizen@cpan.org>>,
      dist_version_from  => 'lib/Math/Bacovia.pm',
      release_status     => 'stable',
 
+     dynamic_config    => 0,
      extra_manify_args => { utf8 => 1 },
 
      meta_merge => {

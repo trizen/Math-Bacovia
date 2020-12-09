@@ -1,10 +1,10 @@
 {
    "abstract" : "Symbolic math library with support for alternative representations.",
    "author" : [
-      "Daniel Șuteu <trizen@protonmail.com>"
+      "Daniel Șuteu <trizen@cpan.org>"
    ],
-   "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4224",
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Build version 0.4231",
    "license" : [
       "artistic_2"
    ],
@@ -81,5 +81,5 @@
       }
    },
    "version" : "0.04",
-   "x_serialization_backend" : "JSON::PP version 4.00"
+   "x_serialization_backend" : "JSON::PP version 4.05"
 }
