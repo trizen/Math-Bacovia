@@ -3,9 +3,9 @@ package Math::Bacovia::Sum;
 use 5.014;
 use warnings;
 
-use Set::Product::XS qw(product);
+use Set::Product::XS    qw(product);
 use Class::Multimethods qw();
-use parent qw(Math::Bacovia);
+use parent              qw(Math::Bacovia);
 
 our $VERSION = $Math::Bacovia::VERSION;
 

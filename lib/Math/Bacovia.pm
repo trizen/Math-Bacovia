@@ -8,9 +8,9 @@ BEGIN {
     $Math::Bacovia::VERSION = '0.04';
 }
 
-use List::UtilsBy qw();
+use List::UtilsBy       qw();
 use Class::Multimethods qw();
-use Math::AnyNum qw();
+use Math::AnyNum        qw();
 
 our %HIERARCHY = (
                   'Math::Bacovia::Number'     => 0,
@@ -453,8 +453,7 @@ sub atan2 {
 # tanh(x) = (exp(2x) - 1) / (exp(2x) + 1)
 sub tanh {
     my ($x) = @_;
-    $x->{_tanh} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) - $ONE),
-                                                   ('Math::Bacovia::Exp'->new($TWO * $x) + $ONE));
+    $x->{_tanh} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) - $ONE), ('Math::Bacovia::Exp'->new($TWO * $x) + $ONE));
 }
 
 # atanh(x) = (log(1 + x) - log(1 - x)) / 2 = log(sqrt(1+x) / sqrt(1-x))
@@ -463,12 +462,7 @@ sub atanh {
     $x->{_atanh} //=
 
       #'Math::Bacovia::Fraction'->new('Math::Bacovia::Log'->new($ONE + $x) - 'Math::Bacovia::Log'->new($ONE - $x), $TWO);
-      'Math::Bacovia::Log'->new(
-                                'Math::Bacovia::Fraction'->new(
-                                                               'Math::Bacovia::Power'->new($ONE + $x, $HALF),
-                                                               'Math::Bacovia::Power'->new($ONE - $x, $HALF)
-                                                              )
-                               );
+      'Math::Bacovia::Log'->new('Math::Bacovia::Fraction'->new('Math::Bacovia::Power'->new($ONE + $x, $HALF), 'Math::Bacovia::Power'->new($ONE - $x, $HALF)));
 }
 
 # cot(x) = i + (2*i)/(exp(2*i*x) - 1)
@@ -486,8 +480,7 @@ sub acot {
 # coth(x) = (exp(2x) + 1) / (exp(2x) - 1)
 sub coth {
     my ($x) = @_;
-    $x->{_coth} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $ONE),
-                                                   ('Math::Bacovia::Exp'->new($TWO * $x) - $ONE));
+    $x->{_coth} //= 'Math::Bacovia::Fraction'->new(('Math::Bacovia::Exp'->new($TWO * $x) + $ONE), ('Math::Bacovia::Exp'->new($TWO * $x) - $ONE));
 }
 
 # acoth(x) = atanh(1/x)

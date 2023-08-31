@@ -4,7 +4,7 @@ use 5.014;
 use warnings;
 
 use Class::Multimethods qw();
-use parent qw(Math::Bacovia);
+use parent              qw(Math::Bacovia);
 
 our $VERSION = $Math::Bacovia::VERSION;
 
@@ -109,7 +109,7 @@ sub pretty {
         else {
             "$base^$pow";
         }
-      }
+    }
 }
 
 sub stringify {
